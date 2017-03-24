@@ -36,12 +36,13 @@ $ ./pre-installation.sh
 ```
 
  ### Post-installation
-After the reboot, run:
-```sh
-$ ./pos-installation.sh
-```
+Will run automatically.
 
  ### snackk-installation
+ After the reboot, run:
+```sh
+$ ./snackk-installation.sh
+```
  
  ### Problems
 Any problem with install just run:
