@@ -16,14 +16,16 @@ print_line() {
 }
 
 print_results() {
-    failed=$success - $to_install;
+    failed=$((to_install-success));
 
     if [[ $failed -eq 0 ]]; then
-        echo -e "    $SUC_MS Installed all successfully."
+        echo -e "    $SUC_MS $to_install Installed successfully."
     else
-        echo -e "    $SUC_MS  $success Installed successfully." 
+        echo -e "    $SUC_MS $success Installed successfully." 
         echo -e "    $FAIL_MS $failed Failed to install."
-        echo -e "    $FAIL_MS $1"
+       if [ ! -z "$1" ]; then
+            echo -e "    $FAIL_MS $1"
+        fi
     fi   
 }
 
