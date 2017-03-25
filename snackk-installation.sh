@@ -72,10 +72,13 @@ function pacman_config
     ERR=0
 	# Configure pacman
 	echo "Adding Multilib & AUR"
-	sed -i 's/^#[multilib]/[multilib]/' /etc/pacman.conf || ERR=1
+	echo "" >> /etc/pacman.conf || ERR=1
+	echo "[multilib]" >> /etc/pacman.conf || ERR=1
+	echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf || ERR=1
+	echo "" >> /etc/pacman.conf || ERR=1
 	echo "[archlinuxfr]" >> /etc/pacman.conf || ERR=1
 	echo "SigLevel = Never" >> /etc/pacman.conf || ERR=1
-	echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf || ERR=1
+	echo "Server = http://repo.archlinux.fr/\$arch" >> /etc/pacman.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Pacman config error"
@@ -90,9 +93,11 @@ function aur_dependecies
     ERR=0
 	# Downloading AUR dependencies
 	echo "Downloading AUR dependencies..."
-	pacman -Sy yaourt
-	yaourt -S `echo $AUR_PKGS`
-	mkinitcpio -p Linux
+	pacman -Sy yaourt --noconfirm || ERR=1
+	sudo -u snackk bash
+	yaourt -S `echo $AUR_PKGS` --noconfirm || ERR=1
+	exit
+	mkinitcpio -p Linux || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "AUR dependencies error"
@@ -107,7 +112,7 @@ function pacman_dependecies
     ERR=0
 	# Downloading PACMAN dependencies
 	echo "Downloading pacman dependencies..."
-	pacman -S `echo $PAC_PKGS`
+	pacman -S `echo $PAC_PKGS` --noconfirm || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Pacman dependencies error"
@@ -137,9 +142,8 @@ function deepin_dde
     ERR=0
 	# Adding some nice touch :D
 	echo "Installing deepin..."
-	pacman -S `echo $DEEPIN` || ERR=1
-	#Need to edit /etc/lightdm/lightdm.conf
-	#greeter-session=lightdm-deepin-greeter
+	pacman -S `echo $DEEPIN` --noconfirm || ERR=1
+	echo "greeter-session=lightdm-deepin-greeter" >> /etc/lightdm/lightdm.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Deepin dde error"
@@ -153,13 +157,13 @@ function deepin_dde
 #           		Script                       #
 ##################################################
 
-run_osprober
-add_user
-set_user_passwd
-pacman_config
-aur_dependecies
-pacman_dependecies
-blacklist
+#run_osprober
+#add_user
+#set_user_passwd
+#pacman_config
+#aur_dependecies
+#pacman_dependecies
+#blacklist
 deepin_dde
 
 print_results

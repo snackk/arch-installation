@@ -94,7 +94,7 @@ function set_timezone
     ERR=0
 	# Time zone
 	echo "Configuring time zone..."
-	ln -s /usr/share/zoneinfo/$LOCALE /etc/localtime || ERR=1
+	ln -sf /usr/share/zoneinfo/$LOCALE /etc/localtime || ERR=1
 	echo $LOCALE > /etc/timezone
 	#hwclock --systohc --utc
 
@@ -133,7 +133,7 @@ function basic_dependencies
     ERR=0
 	#Installing basic installation dependencies
 	echo "Running pacman -S $BASIC_PKGS"
-	pacman -S /mnt `echo $BASIC_PKGS` || ERR=1
+	pacman -S `echo $BASIC_PKGS` --noconfirm || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         print_results "Basic dependencies error."
@@ -171,7 +171,7 @@ set_timezone
 initial_ramdisk
 set_root_passwd
 basic_dependencies
-grub_efi
+#grub_efi
 
 print_results 
 print_line
