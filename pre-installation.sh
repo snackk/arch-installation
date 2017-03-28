@@ -63,7 +63,7 @@ function mount_root_boot_partitions
     ERR=0
     echo "Mounting partitions"
     # Mount Root partition
-    mount /dev/$ROOT_PART /mnt || ERR=1
+    mount /dev/$ROOT_PART /mnt/linux || ERR=1
     # Mount Boot partition
     mkdir /mnt/boot || ERR=1
     mount /dev/$EFI_BOOT /mnt/boot || ERR=1
@@ -79,10 +79,10 @@ function mount_root_boot_partitions
 function install_system
 {
     ERR=0
-    echo "Running pacstrap /mnt base base-devel"
-    pacstrap /mnt base base-devel || ERR=1
+    echo "Running pacstrap /mnt/linux base base-devel"
+    pacstrap /mnt/linux base base-devel || ERR=1
     echo "Running genfstab"
-    genfstab -p /mnt >> /mnt/etc/fstab || ERR=1
+    genfstab -p /mnt/linux >> /mnt/linux/etc/fstab || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         print_results "Pacstrap error."
@@ -116,22 +116,21 @@ mount_root_boot_partitions
 install_system
 
 ### Copy necessary files
-cp snackk.conf /mnt
-cp snackk-installation /mnt
-cp post-installation.sh /mnt
+cp snackk.conf /mnt/linux
+cp *.sh /mnt/linux
 
 #### Chroot and configure the base system
-arch-chroot /mnt << EOF
+arch-chroot /mnt/linux << EOF
 print_results
 print_line
 echo "Runnig ./post-installation.sh"
 
 ./post-installation.sh
-rm post-installation.sh snackk.conf
 EOF
 
 echo "Umounting partitions"
-umount /mnt
+umount /mnt/linux
+umount /mnt/boot
 shutdown -r 10 "After it reboots, run ./snackk-installation.sh"
 
 
