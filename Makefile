@@ -15,7 +15,7 @@ OUTPUT_ISO=$(BUILD_DIR)/out
 
 LABEL=SNACKK_$(shell date +%Y%m)
 
-build-all: clean
+build-all: build-64 iso clean
 
 build-32: 
 	@echo "#############################"
