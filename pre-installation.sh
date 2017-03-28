@@ -119,6 +119,9 @@ install_system
 cp snackk.conf /mnt/linux
 cp *.sh /mnt/linux
 
+###Test
+umount /mnt/boot
+
 #### Chroot and configure the base system
 arch-chroot /mnt/linux << EOF
 print_results
@@ -130,7 +133,7 @@ EOF
 
 echo "Umounting partitions"
 umount /mnt/linux
-umount /mnt/boot
+###umount /mnt/boot
 shutdown -r 10 "After it reboots, run ./snackk-installation.sh"
 
 

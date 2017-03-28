@@ -147,9 +147,12 @@ function grub_efi
 {
     ERR=0
 	# Install grub & set EFI
+    mkdir /mnt/boot || ERR=1
+    mount /dev/$EFI_BOOT /mnt/boot || ERR=1
 	echo "Installing grub on /dev/$EFI_BOOT"
 	grub-install --target=x86_64-efi --efi-directory=/mnt/boot --bootloader-id=grub --boot-directory=/mnt/boot || ERR=1
 	grub-mkconfig -o /mnt/boot/grub/grub.cfg
+	umount /mnt/boot
 
     if [[ $ERR -eq 1 ]]; then
         print_results "Grub error."
@@ -171,7 +174,7 @@ set_timezone
 initial_ramdisk
 set_root_passwd
 basic_dependencies
-#grub_efi
+grub_efi
 
 print_results 
 print_line

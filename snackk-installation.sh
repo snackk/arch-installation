@@ -34,8 +34,9 @@ function run_osprober
 	# OS-prober
 	echo "Running OS-prober..."
 	os-prober
-	mount /dev/$EFI_BOOT /mnt
+	mount /dev/$EFI_BOOT /mnt/boot
 	grub-mkconfig -o /mnt/grub/grub.cfg || ERR=1
+	umount /mnt/boot
 
     if [[ $ERR -eq 1 ]]; then
         echo "Run osprober error"
@@ -157,13 +158,13 @@ function deepin_dde
 #           		Script                       #
 ##################################################
 
-#run_osprober
-#add_user
-#set_user_passwd
-#pacman_config
+run_osprober
+add_user
+set_user_passwd
+pacman_config
 #aur_dependecies
-#pacman_dependecies
-#blacklist
+pacman_dependecies
+blacklist
 deepin_dde
 
 print_results
