@@ -15,9 +15,8 @@ Before anything, a customized image of arch-linux must be built, in order for th
 
 ```sh
 $ make ISO=~/Downloads/archlinux-2017.08.01-dual.iso
-$ make iso
 ```
-Final iso will be available at ./build/out/
+Final iso will be available inside this repository directory.
 
 ### Installation
 ### WARNING: My .conf file contains specific hardware dependencies, and may break your system!
