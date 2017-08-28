@@ -12,19 +12,19 @@ success=0;
 ##################################################
 
 print_line() {
-    printf "%$(tput cols)s\n"|tr ' ' '-'
+    printf "${BLUE}%$(tput cols)s\n${NC}"|tr ' ' '-'
 }
 
 print_results() {
     failed=$((to_install-success));
 
     if [[ $failed -eq 0 ]]; then
-        echo -e "    $SUC_MS $to_install Installed successfully."
+        echo -e "    $SUC_MS $to_install ${GREEN}Installed successfully.${NC}"
     else
-        echo -e "    $SUC_MS $success Installed successfully." 
-        echo -e "    $FAIL_MS $failed Failed to install."
-       if [ ! -z "$1" ]; then
-            echo -e "    $FAIL_MS $1"
+        echo -e "    $SUC_MS $success ${GREEN}Installed successfully.${NC}"
+        echo -e "    $FAIL_MS $failed ${RED}Failed to install.${NC}"
+       	if [ ! -z "$1" ]; then
+            echo -e "    $FAIL_MS ${RED}$1${NC}"
         fi
     fi   
 }
@@ -32,13 +32,14 @@ print_results() {
 function welcome
 {
     clear
-    echo "Welcome to snackk's arch-linux installation script"
-    echo "This script will install pre & post installation."    
+    echo -e "Welcome to ${RED}snackk's arch-linux${NC} installation script!"
+    echo -e "This script will install arch-linux for a ${RED}Toshiba S50-b-131.${NC}"
+    echo -e "${RED}!!WARNING!!${NC} Hardware dependencies."    
     print_line
     echo "Requirements:"
-    echo "-> Run script as root user"
-    echo "-> Internet connection"
-    echo "-> Go grab a Coffee & chill. I got this, trust me..."    
+    echo "    -> Run script as root user"
+    echo "    -> Internet connection"
+    echo "    -> Coffee & Patience"
     print_line
     read -e -sn 1 -p "Press enter to continue..."
 }
@@ -47,7 +48,7 @@ function make_root_fs
 {
     ERR=0
     # Formats root partition to the specified File System
-    echo "Formatting Root partitiont"
+    echo -e "${BLUE}Formatting Root partition${NC}"
     mkfs.$ROOT_FS /dev/$ROOT_PART -L Root 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -61,7 +62,7 @@ function make_root_fs
 function mount_root_boot_partitions
 {
     ERR=0
-    echo "Mounting partitions"
+    echo -e "${BLUE}Mounting partitions${NC}"
     # Mount Root partition
     mount /dev/$ROOT_PART /mnt/linux || ERR=1
     # Mount Boot partition
@@ -79,9 +80,9 @@ function mount_root_boot_partitions
 function install_system
 {
     ERR=0
-    echo "Running pacstrap /mnt/linux base base-devel"
+    echo "${BLUE}Running pacstrap${NC}"
     pacstrap /mnt/linux base base-devel || ERR=1
-    echo "Running genfstab"
+    echo "${BLUE}Generating File System Table${NC}"
     genfstab -p /mnt/linux >> /mnt/linux/etc/fstab || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -119,25 +120,26 @@ install_system
 cp snackk.conf /mnt/linux
 cp *.sh /mnt/linux
 
-###Test
+### Test
 umount /mnt/boot
 
-#### Chroot and configure the base system
+#### chroot and configure the base system
 arch-chroot /mnt/linux << EOF
 print_results
-print_line
-echo "Runnig ./post-installation.sh"
+if [[ $success -ne $to_install ]]; then
+    echo -e "${RED}Please fix the errors and come back again.${NC}"
+    exit
+fi  
 
+print_line
+echo "Running ./post-installation.sh"
 ./post-installation.sh
 EOF
 
 echo "Umounting partitions"
 umount /mnt/linux
-###umount /mnt/boot
+### umount /mnt/boot
 shutdown -r 10 "After it reboots, run ./snackk-installation.sh"
-
-
-
 
 ##################################################
 #               USING ALL HARDDRIVE              #
@@ -222,4 +224,3 @@ function mount_ALL_partitions
         exit 1
     fi
 }
-
