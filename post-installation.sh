@@ -4,7 +4,6 @@
 source snackk.conf
 
 to_install=9;
-success=0;
 
 ##################################################
 #               POST-INSTALLATION                #

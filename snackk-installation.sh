@@ -17,7 +17,7 @@ function run_osprober
 	echo -e "${BLUE}Running OS-prober${NC}"
 	os-prober
 	mount /dev/$EFI_BOOT /mnt/boot
-	grub-mkconfig -o /mnt/grub/grub.cfg || ERR=1
+	grub-mkconfig -o /mnt/boot/grub/grub.cfg || ERR=1
 	umount /mnt/boot
 
     if [[ $ERR -eq 1 ]]; then
