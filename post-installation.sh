@@ -10,29 +10,11 @@ success=0;
 #               POST-INSTALLATION                #
 ##################################################
 
-print_line() {
-    printf "%$(tput cols)s\n"|tr ' ' '-'
-}
-
-print_results() {
-    failed=$((to_install-success));
-
-    if [[ $failed -eq 0 ]]; then
-        echo -e "    $SUC_MS $to_install Installed successfully."
-    else
-        echo -e "    $SUC_MS $success Installed successfully." 
-        echo -e "    $FAIL_MS $failed Failed to install."
-       if [ ! -z "$1" ]; then
-            echo -e "    $FAIL_MS $1"
-        fi
-    fi   
-}
-
 function set_hostname
 {
     ERR=0
 	# Hostname
-	echo "Configuring Hostname..."
+	echo -e "${BLUE}Configuring Hostname${NC}"
 	echo $HOSTN > /etc/hostname || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -47,7 +29,7 @@ function keyboard_layout
 {
     ERR=0
 	# Keybord Layout
-	echo "Configuring Keyboard layout..."
+	echo -e "${BLUE}Configuring Keyboard layout${NC}"
 	echo 'KEYMAP='$KEYBOARD_LAYOUT > /etc/vconsole.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -62,7 +44,7 @@ function gen_locale
 {
     ERR=0
 	# Locale locale.gen
-	echo "Configuring locale..."
+	echo -e "${BLUE}Configuring locale${NC}"
 	sed -i 's/^#'$LANGUAGE'/'$LANGUAGE/ /etc/locale.gen || ERR=1
 	locale-gen
 
@@ -93,13 +75,13 @@ function set_timezone
 {
     ERR=0
 	# Time zone
-	echo "Configuring time zone..."
+	echo -e "${BLUE}Configuring time zone${NC}"
 	ln -sf /usr/share/zoneinfo/$LOCALE /etc/localtime || ERR=1
 	echo $LOCALE > /etc/timezone
 	#hwclock --systohc --utc
 
     if [[ $ERR -eq 1 ]]; then
-        print_results "Timezone error."
+        print_results "Time zone error."
         exit 1
     else
     	let success+=1;
@@ -110,7 +92,7 @@ function initial_ramdisk
 {
     ERR=0
 	# Create an initial ramdisk environment
-	echo "Creating initial ramdisk..."
+	echo -e "${BLUE}Creating initial ramdisk${NC}"
 	mkinitcpio -p linux || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -124,7 +106,7 @@ function initial_ramdisk
 function set_root_passwd
 {
 	# Setting root password
-	echo "Changing root password..."
+	echo -e "${BLUE}Changing root password${NC}"
 	echo -e $ROOT_PASSWD"\n"$ROOT_PASSWD | passwd
 }
 
@@ -132,7 +114,7 @@ function basic_dependencies
 {
     ERR=0
 	#Installing basic installation dependencies
-	echo "Running pacman -S $BASIC_PKGS"
+	echo -e "${BLUE}Running pacman -S${NC} $BASIC_PKGS"
 	pacman -S `echo $BASIC_PKGS` --noconfirm || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -146,10 +128,10 @@ function basic_dependencies
 function grub_efi
 {
     ERR=0
-	# Install grub & set EFI
+	# Install grub on EFI
     mkdir /mnt/boot || ERR=1
     mount /dev/$EFI_BOOT /mnt/boot || ERR=1
-	echo "Installing grub on /dev/$EFI_BOOT"
+	echo -e "${BLUE}Installing grub on${NC} /dev/$EFI_BOOT"
 	grub-install --target=x86_64-efi --efi-directory=/mnt/boot --bootloader-id=grub --boot-directory=/mnt/boot || ERR=1
 	grub-mkconfig -o /mnt/boot/grub/grub.cfg
 	umount /mnt/boot

@@ -8,26 +8,8 @@ success=0;
 
 ##################################################
 #                PRE-INSTALLATION                #
-#              USING DUAL BOOT & EFI             #
+#             USING DUAL BOOT ON EFI             #
 ##################################################
-
-print_line() {
-    printf "${BLUE}%$(tput cols)s\n${NC}"|tr ' ' '-'
-}
-
-print_results() {
-    failed=$((to_install-success));
-
-    if [[ $failed -eq 0 ]]; then
-        echo -e "    $SUC_MS $to_install ${GREEN}Installed successfully.${NC}"
-    else
-        echo -e "    $SUC_MS $success ${GREEN}Installed successfully.${NC}"
-        echo -e "    $FAIL_MS $failed ${RED}Failed to install.${NC}"
-       	if [ ! -z "$1" ]; then
-            echo -e "    $FAIL_MS ${RED}$1${NC}"
-        fi
-    fi   
-}
 
 function welcome
 {
@@ -96,6 +78,7 @@ function install_system
 ##################################################
 #                   Script                       #
 ##################################################
+
 # Load Keybord Layout
 loadkeys $KEYBOARD_LAYOUT
 
@@ -140,6 +123,8 @@ echo "Umounting partitions"
 umount /mnt/linux
 ### umount /mnt/boot
 shutdown -r 10 "After it reboots, run ./snackk-installation.sh"
+
+
 
 ##################################################
 #               USING ALL HARDDRIVE              #

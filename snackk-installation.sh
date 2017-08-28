@@ -10,36 +10,18 @@ success=0
 #              SNACKK-INSTALLATION               #
 ##################################################
 
-print_line() {
-    printf "%$(tput cols)s\n"|tr ' ' '-'
-}
-
-print_results() {
-    failed=$((to_install-success));
-
-    if [[ $failed -eq 0 ]]; then
-        echo -e "    $SUC_MS $to_install Installed successfully."
-    else
-        echo -e "    $SUC_MS $success Installed successfully." 
-        echo -e "    $FAIL_MS $failed Failed to install."
-       if [ ! -z "$1" ]; then
-            echo -e "    $FAIL_MS $1"
-        fi
-    fi   
-}
-
 function run_osprober
 {
     ERR=0
 	# OS-prober
-	echo "Running OS-prober..."
+	echo -e "${BLUE}Running OS-prober${NC}"
 	os-prober
 	mount /dev/$EFI_BOOT /mnt/boot
 	grub-mkconfig -o /mnt/grub/grub.cfg || ERR=1
 	umount /mnt/boot
 
     if [[ $ERR -eq 1 ]]; then
-        echo "Run osprober error"
+        echo "osprober error."
         exit 1
     else
     	let success+=1;
@@ -50,11 +32,11 @@ function add_user
 {
     ERR=0
 	# Add user
-	echo "Adding new user $USERN ..."
+	echo -e "${BLUE}Adding new user${NC} $USERN"
 	useradd -m -G wheel -s /bin/bash $USERN || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "Add user error"
+        echo "Add user error."
         exit 1
     else
     	let success+=1;
@@ -64,7 +46,7 @@ function add_user
 function set_user_passwd
 {
 	# Setting $USERN password
-	echo "Changing $USERN password..."
+	echo -e "${BLUE}Changing $USERN password${NC}"
 	echo -e $ROOT_PASSWD"\n"$ROOT_PASSWD | passwd $USERN
 }
 
@@ -72,7 +54,7 @@ function pacman_config
 {
     ERR=0
 	# Configure pacman
-	echo "Adding Multilib & AUR"
+	echo -e "${BLUE}Adding Multilib & AUR${NC}"
 	echo "" >> /etc/pacman.conf || ERR=1
 	echo "[multilib]" >> /etc/pacman.conf || ERR=1
 	echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf || ERR=1
@@ -82,7 +64,7 @@ function pacman_config
 	echo "Server = http://repo.archlinux.fr/\$arch" >> /etc/pacman.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "Pacman config error"
+        echo "Pacman config error."
         exit 1
     else
     	let success+=1;
@@ -93,7 +75,7 @@ function aur_dependecies
 {
     ERR=0
 	# Downloading AUR dependencies
-	echo "Downloading AUR dependencies..."
+	echo -e "${BLUE}Downloading AUR dependencies${NC}"
 	pacman -Sy yaourt --noconfirm || ERR=1
 	sudo -u snackk bash
 	yaourt -S `echo $AUR_PKGS` --noconfirm || ERR=1
@@ -101,7 +83,7 @@ function aur_dependecies
 	mkinitcpio -p Linux || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "AUR dependencies error"
+        echo "AUR dependencies error."
         exit 1
     else
     	let success+=1;
@@ -112,11 +94,11 @@ function pacman_dependecies
 {
     ERR=0
 	# Downloading PACMAN dependencies
-	echo "Downloading pacman dependencies..."
+	echo -e "${BLUE}Downloading pacman dependencies${NC}"
 	pacman -S `echo $PAC_PKGS` --noconfirm || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "Pacman dependencies error"
+        echo "Pacman dependencies error."
         exit 1
     else
     	let success+=1;
@@ -127,11 +109,11 @@ function blacklist
 {
     ERR=0
 	# Add anoying beep to blacklist
-	echo "Blacklisting speaker!"
+	echo -e "${BLUE}Blacklisting speaker${NC}"
 	echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "Blacklist error"
+        echo "Blacklist error."
         exit 1
     else
     	let success+=1;
@@ -142,12 +124,12 @@ function deepin_dde
 {
     ERR=0
 	# Adding some nice touch :D
-	echo "Installing deepin..."
+	echo -e "${BLUE}Installing deepin${NC}"
 	pacman -S `echo $DEEPIN` --noconfirm || ERR=1
 	echo "greeter-session=lightdm-deepin-greeter" >> /etc/lightdm/lightdm.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "Deepin dde error"
+        echo "Deepin dde error."
         exit 1
     else
     	let success+=1;
