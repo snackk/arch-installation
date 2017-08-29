@@ -13,13 +13,13 @@ to_install=3;
 function welcome
 {
     clear
-    echo -e "Welcome to ${RED}snackk's${NC} arch-linux installation script!"
-    echo -e "This script will install arch-linux for a ${RED}Toshiba S50-b-131.${NC}"
-    echo -e "${RED}!!WARNING!!${NC} Run at your own risk."    
-    echo "Requirements:"
-    echo "    -> Run script as root user"
-    echo "    -> Internet connection"
-    echo "    -> Coffee & bit of patience"
+    echo -e "    Welcome to ${RED}snackk's${NC} arch-linux installation script!"
+    echo -e "    This script will install ${BLUE}arch-linux${NC} for a ${RED}Toshiba S50-b-131.${NC}"
+    echo -e "    ${RED}!!WARNING!!${NC} Use at your own risk."    
+    echo "    Requirements:"
+    echo "        -> Run script as ${RED}root${NC}"
+    echo "        -> Internet connection"
+    echo "        -> Coffee & just chill"
     print_line
     read -e -sn 1 -p "Press enter to continue..."
 }
@@ -28,7 +28,7 @@ function make_root_fs
 {
     ERR=0
     # Formats root partition to the specified File System
-    echo -e "${BLUE}Formatting Root partition${NC}"
+    print_pretty_header "Formatting Root partition"
     mkfs.$ROOT_FS /dev/$ROOT_PART -L Root 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -42,7 +42,7 @@ function make_root_fs
 function mount_root_boot_partitions
 {
     ERR=0
-    echo -e "${BLUE}Mounting partitions${NC}"
+    print_pretty_header "Mounting partitions"
     # Mount Root partition
     mkdir /mnt/linux || ERR=1
     mount /dev/$ROOT_PART /mnt/linux || ERR=1
@@ -61,9 +61,9 @@ function mount_root_boot_partitions
 function install_system
 {
     ERR=0
-    echo -e "${BLUE}Running pacstrap${NC}"
+    print_pretty_header "Running pacstrap"
     pacstrap /mnt/linux base base-devel 1>/dev/null || ERR=1
-    echo -e "${BLUE}Generating fstab${NC}"
+    print_pretty_header "Generating fstab"
     genfstab -p /mnt/linux >> /mnt/linux/etc/fstab 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -84,8 +84,8 @@ loadkeys $KEYBOARD_LAYOUT
 while true; do
     read -p "Hardware dependencies, continue anyway [y/n]? " yn
     case $yn in
-        [Yy]* ) echo "Good luck..."; break;;
-        [Nn]* ) echo "Bye."; exit;;
+        [Yy]* ) echo "GG..."; break;;
+        [Nn]* ) echo "LOL n00b."; exit;;
         * ) echo "Please answer yes or no.";;
     esac
 done
@@ -99,15 +99,15 @@ mount_root_boot_partitions
 install_system
 
 ### Copy necessary files
-cp snackk.conf /mnt/linux
-cp *.sh /mnt/linux
+cp snackk.conf /mnt/linux/arch-installation
+cp *.sh /mnt/linux/arch-installation
 
 ### Unmount boot partition
 umount /mnt/boot
 
 print_results
 if [[ $success -ne $to_install ]]; then
-    echo -e "${RED}Please fix the errors and run it again.${NC}"
+    echo -e "${RED}Check the FAQ for diagnostics.${NC}"
     exit 0
 fi
 print_line
@@ -118,9 +118,10 @@ arch-chroot /mnt/linux << EOF
 ./post-installation.sh
 EOF
 
-echo -e "${BLUE}Unmounting partitions${NC}"
+print_pretty_header "Unmounting partitions"
 umount /mnt/linux
-shutdown -h +1 "After it reboots, run ./snackk-installation.sh"
+print_pretty_header "Computer will shutdown. Power it on and run ./snackk-installation.sh"
+shutdown -h +1 ""
 
 
 

@@ -13,7 +13,7 @@ function set_hostname
 {
     ERR=0
 	# Hostname
-	echo -e "${BLUE}Setting Hostname${NC}"
+	print_pretty_header "Setting Hostname"
 	echo $HOSTN > /etc/hostname || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -28,7 +28,7 @@ function keyboard_layout
 {
     ERR=0
 	# Keybord Layout
-	echo -e "${BLUE}Setting Keyboard layout${NC}"
+	print_pretty_header "Setting Keyboard layout"
 	echo 'KEYMAP='$KEYBOARD_LAYOUT > /etc/vconsole.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -43,9 +43,9 @@ function gen_locale
 {
     ERR=0
 	# Locale locale.gen
-	echo -e "${BLUE}Setting locale${NC}"
+	print_pretty_header "Setting locale"
 	sed -i 's/^#'$LANGUAGE'/'$LANGUAGE/ /etc/locale.gen || ERR=1
-	locale-gen
+	locale-gen 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         print_results "Locale gen error."
@@ -59,7 +59,7 @@ function set_language
 {
     ERR=0
 	# Locale locale.conf
-	echo -e "${BLUE}Configuring language${NC}"
+	print_pretty_header "Configuring language"
 	export LANG=$LANGUAGE'.utf-8'
 	echo 'LANG='$LANGUAGE'.utf-8' > /etc/locale.conf
 
@@ -75,7 +75,7 @@ function set_timezone
 {
     ERR=0
 	# Time zone
-	echo -e "${BLUE}Configuring time zone${NC}"
+	print_pretty_header "Configuring time zone"
 	ln -sf /usr/share/zoneinfo/$LOCALE /etc/localtime || ERR=1
 	echo $LOCALE > /etc/timezone
 	#hwclock --systohc --utc
@@ -92,7 +92,7 @@ function initial_ramdisk
 {
     ERR=0
 	# Create an initial ramdisk environment
-	echo -e "${BLUE}Creating initial ramdisk${NC}"
+	print_pretty_header "Creating initial ramdisk"
 	mkinitcpio -p linux 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -107,7 +107,7 @@ function set_root_passwd
 {
     ERR=0
 	# Setting root password
-	echo -e "${BLUE}Changing root password${NC}"
+	print_pretty_header "Changing root password"
 	echo -e $ROOT_PASSWD"\n"$ROOT_PASSWD | passwd
 
     if [[ $ERR -eq 1 ]]; then
@@ -122,7 +122,7 @@ function basic_dependencies
 {
     ERR=0
 	#Installing basic installation dependencies
-	echo -e "${BLUE}Running pacman -S${NC} $BASIC_PKGS"
+	print_pretty_header "Running pacman -S${NC} $BASIC_PKGS"
 	pacman -S `echo $BASIC_PKGS` --noconfirm 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -139,7 +139,7 @@ function efi
 	# Install EFI
     	mkdir /mnt/boot || ERR=1
     	mount /dev/$EFI_BOOT /mnt/boot || ERR=1
-	echo -e "${BLUE}Installing EFI on${NC} /dev/$EFI_BOOT"
+	print_pretty_header "Installing EFI on${NC} /dev/$EFI_BOOT"
 	grub-install --target=x86_64-efi --efi-directory=/mnt/boot --bootloader-id=grub --boot-directory=/mnt/boot 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -154,7 +154,7 @@ function grub
 {
     ERR=0
 	# Making grub config
-	echo -e "${BLUE}Making grub config${NC}"
+	print_pretty_header "Making grub config"
 	grub-mkconfig -o /mnt/boot/grub/grub.cfg 1>/dev/null || ERR=1
 	umount /mnt/boot
 
