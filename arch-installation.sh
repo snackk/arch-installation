@@ -16,7 +16,7 @@ function welcome
     echo -e "    This script will install ${BLUE}arch-linux${NC} on ${RED}/dev/$ROOT_PART${NC}"
     echo -e "    EFI partition ${RED}/dev/$EFI_BOOT${NC}"    
     echo "    Requirements:"
-    echo "        -> Run script as ${RED}root${NC}"
+    echo -e "        -> Run script as ${RED}root${NC}"
     echo "        -> Internet connection"
     echo "        -> Go grab a coffee & chill"
     print_line

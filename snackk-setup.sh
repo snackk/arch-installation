@@ -14,7 +14,7 @@ function pacman_dependecies
     ERR=0
     # Downloading PACMAN dependencies
     print_pretty_header "Installing${NC} $SNK_CUSTOM"
-    pacman -S `echo $SNK_CUSTOM` --noconfirm 1>/dev/null || ERR=1
+    echo -e $ROOT_PASSWD | sudo pacman -S `echo $SNK_CUSTOM` --noconfirm 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Pacman dependencies error."
@@ -28,8 +28,8 @@ function set_zsh
 {
     ERR=0
     print_pretty_header "Setting ZSH as default shell"
-    chsh -s /usr/bin/zsh 1>/dev/null || ERR=1
-    echo -e $ROOT_PASSWD | sudo -u root chsh -s /usr/bin/zsh 1>/dev/null || ERR=1
+    echo -e $ROOT_PASSWD | chsh -s /usr/bin/zsh 1>/dev/null || ERR=1
+    echo -e $ROOT_PASSWD | su -c chsh -s /usr/bin/zsh 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "ZSH error."
@@ -44,7 +44,7 @@ function install_oh_my_zsh
     ERR=0
     print_pretty_header "Installing Oh-My-Zsh"
     cd $HOME
-    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" 1>/dev/null || ERR=1
+    echo -e $ROOT_PASSWD | sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "ZSH error."

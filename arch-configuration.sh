@@ -13,7 +13,7 @@ function set_hostname
 {
     ERR=0
 	# Hostname
-	print_pretty_header "Setting Hostname${NC} $HOSTN"
+	print_pretty_header "Setting hostname${NC} $HOSTN"
 	echo $HOSTN > /etc/hostname || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -28,11 +28,11 @@ function set_keyboard_layout
 {
     ERR=0
 	# Keybord Layout
-	print_pretty_header "Setting Keyboard layout${NC} $KEYBOARD_LAYOUT"
+	print_pretty_header "Setting keyboard layout${NC} $KEYBOARD_LAYOUT"
 	echo 'KEYMAP='$KEYBOARD_LAYOUT > /etc/vconsole.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        print_results "Keyboard Layout error."
+        print_results "Keyboard layout error."
         exit 1
     else
     	let success+=1;
