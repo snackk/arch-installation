@@ -19,7 +19,7 @@ function welcome
     echo "Requirements:"
     echo "    -> Run script as root user"
     echo "    -> Internet connection"
-    echo "    -> Coffee & Bit of patience"
+    echo "    -> Coffee & bit of patience"
     print_line
     read -e -sn 1 -p "Press enter to continue..."
 }
@@ -63,11 +63,11 @@ function install_system
     ERR=0
     echo -e "${BLUE}Running pacstrap${NC}"
     pacstrap /mnt/linux base base-devel 1>/dev/null || ERR=1
-    echo -e "${BLUE}Generating File System Table${NC}"
+    echo -e "${BLUE}Generating fstab${NC}"
     genfstab -p /mnt/linux >> /mnt/linux/etc/fstab 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        print_results "Pacstrap error."
+        print_results "Install system error."
         exit 1
     else
         let success+=1;
@@ -116,7 +116,7 @@ print_line
 arch-chroot /mnt/linux << EOF  
 
 ./post-installation.sh
-exit
+EOF
 
 echo -e "${BLUE}Unmounting partitions${NC}"
 umount /mnt/linux

@@ -3,7 +3,7 @@
 
 source snackk.conf
 
-to_install=9;
+to_install=10;
 
 ##################################################
 #               POST-INSTALLATION                #
@@ -13,7 +13,7 @@ function set_hostname
 {
     ERR=0
 	# Hostname
-	echo -e "${BLUE}Configuring Hostname${NC}"
+	echo -e "${BLUE}Setting Hostname${NC}"
 	echo $HOSTN > /etc/hostname || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -28,7 +28,7 @@ function keyboard_layout
 {
     ERR=0
 	# Keybord Layout
-	echo -e "${BLUE}Configuring Keyboard layout${NC}"
+	echo -e "${BLUE}Setting Keyboard layout${NC}"
 	echo 'KEYMAP='$KEYBOARD_LAYOUT > /etc/vconsole.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -43,12 +43,12 @@ function gen_locale
 {
     ERR=0
 	# Locale locale.gen
-	echo -e "${BLUE}Configuring locale${NC}"
+	echo -e "${BLUE}Setting locale${NC}"
 	sed -i 's/^#'$LANGUAGE'/'$LANGUAGE/ /etc/locale.gen || ERR=1
 	locale-gen
 
     if [[ $ERR -eq 1 ]]; then
-        print_results "locale gen error."
+        print_results "Locale gen error."
         exit 1
     else
     	let success+=1;
@@ -59,6 +59,7 @@ function set_language
 {
     ERR=0
 	# Locale locale.conf
+	echo -e "${BLUE}Configuring language${NC}"
 	export LANG=$LANGUAGE'.utf-8'
 	echo 'LANG='$LANGUAGE'.utf-8' > /etc/locale.conf
 
@@ -92,7 +93,7 @@ function initial_ramdisk
     ERR=0
 	# Create an initial ramdisk environment
 	echo -e "${BLUE}Creating initial ramdisk${NC}"
-	mkinitcpio -p linux || ERR=1
+	mkinitcpio -p linux 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         print_results "Ramdisk error."
@@ -104,9 +105,17 @@ function initial_ramdisk
 
 function set_root_passwd
 {
+    ERR=0
 	# Setting root password
 	echo -e "${BLUE}Changing root password${NC}"
 	echo -e $ROOT_PASSWD"\n"$ROOT_PASSWD | passwd
+
+    if [[ $ERR -eq 1 ]]; then
+        print_results "Root password error."
+        exit 1
+    else
+    	let success+=1;
+    fi
 }
 
 function basic_dependencies
@@ -114,7 +123,7 @@ function basic_dependencies
     ERR=0
 	#Installing basic installation dependencies
 	echo -e "${BLUE}Running pacman -S${NC} $BASIC_PKGS"
-	pacman -S `echo $BASIC_PKGS` --noconfirm || ERR=1
+	pacman -S `echo $BASIC_PKGS` --noconfirm 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         print_results "Basic dependencies error."
@@ -124,15 +133,29 @@ function basic_dependencies
     fi
 }
 
-function grub_efi
+function efi
 {
     ERR=0
-	# Install grub on EFI
-    mkdir /mnt/boot || ERR=1
-    mount /dev/$EFI_BOOT /mnt/boot || ERR=1
-	echo -e "${BLUE}Installing grub on${NC} /dev/$EFI_BOOT"
-	grub-install --target=x86_64-efi --efi-directory=/mnt/boot --bootloader-id=grub --boot-directory=/mnt/boot || ERR=1
-	grub-mkconfig -o /mnt/boot/grub/grub.cfg
+	# Install EFI
+    	mkdir /mnt/boot || ERR=1
+    	mount /dev/$EFI_BOOT /mnt/boot || ERR=1
+	echo -e "${BLUE}Installing EFI on${NC} /dev/$EFI_BOOT"
+	grub-install --target=x86_64-efi --efi-directory=/mnt/boot --bootloader-id=grub --boot-directory=/mnt/boot 1>/dev/null || ERR=1
+
+    if [[ $ERR -eq 1 ]]; then
+        print_results "EFI error."
+        exit 1
+    else
+    	let success+=1;
+    fi
+}
+
+function grub
+{
+    ERR=0
+	# Making grub config
+	echo -e "${BLUE}Making grub config${NC}"
+	grub-mkconfig -o /mnt/boot/grub/grub.cfg 1>/dev/null || ERR=1
 	umount /mnt/boot
 
     if [[ $ERR -eq 1 ]]; then
@@ -144,7 +167,7 @@ function grub_efi
 }
 
 ##################################################
-#           		Script                       #
+#           		Script                   #
 ##################################################
 
 set_hostname
@@ -155,7 +178,8 @@ set_timezone
 initial_ramdisk
 set_root_passwd
 basic_dependencies
-grub_efi
+efi
+grub
 
 print_results 
 print_line

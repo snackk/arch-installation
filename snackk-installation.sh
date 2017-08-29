@@ -15,9 +15,9 @@ function run_osprober
     ERR=0
 	# OS-prober
 	echo -e "${BLUE}Running OS-prober${NC}"
-	os-prober
+	os-prober 1>/dev/null || ERR=1
 	mount /dev/$EFI_BOOT /mnt/boot
-	grub-mkconfig -o /mnt/boot/grub/grub.cfg || ERR=1
+	grub-mkconfig -o /mnt/boot/grub/grub.cfg 1>/dev/null || ERR=1
 	umount /mnt/boot
 
     if [[ $ERR -eq 1 ]]; then
@@ -32,7 +32,7 @@ function add_user
 {
     ERR=0
 	# Add user
-	echo -e "${BLUE}Adding new user${NC} $USERN"
+	echo -e "${BLUE}Setting user${NC} $USERN"
 	useradd -m -G wheel -s /bin/bash $USERN || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -45,9 +45,17 @@ function add_user
 
 function set_user_passwd
 {
+    ERR=0
 	# Setting $USERN password
-	echo -e "${BLUE}Changing $USERN password${NC}"
+	echo -e "${BLUE}Setting $USERN password${NC}"
 	echo -e $ROOT_PASSWD"\n"$ROOT_PASSWD | passwd $USERN
+
+    if [[ $ERR -eq 1 ]]; then
+        echo "Set user error."
+        exit 1
+    else
+    	let success+=1;
+    fi
 }
 
 function pacman_config
@@ -62,6 +70,7 @@ function pacman_config
 	echo "[archlinuxfr]" >> /etc/pacman.conf || ERR=1
 	echo "SigLevel = Never" >> /etc/pacman.conf || ERR=1
 	echo "Server = http://repo.archlinux.fr/\$arch" >> /etc/pacman.conf || ERR=1
+	pacman -Syy 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Pacman config error."
@@ -76,11 +85,11 @@ function aur_dependecies
     ERR=0
 	# Downloading AUR dependencies
 	echo -e "${BLUE}Downloading AUR dependencies${NC}"
-	pacman -Sy yaourt --noconfirm || ERR=1
+	pacman -Sy yaourt --noconfirm 1>/dev/null || ERR=1
 	sudo -u snackk bash
-	yaourt -S `echo $AUR_PKGS` --noconfirm || ERR=1
+	yaourt -S `echo $AUR_PKGS` --noconfirm 1>/dev/null || ERR=1
 	exit
-	mkinitcpio -p Linux || ERR=1
+	mkinitcpio -p linux 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "AUR dependencies error."
@@ -95,7 +104,7 @@ function pacman_dependecies
     ERR=0
 	# Downloading PACMAN dependencies
 	echo -e "${BLUE}Downloading pacman dependencies${NC}"
-	pacman -S `echo $PAC_PKGS` --noconfirm || ERR=1
+	pacman -S `echo $PAC_PKGS` --noconfirm 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Pacman dependencies error."
@@ -108,7 +117,7 @@ function pacman_dependecies
 function blacklist
 {
     ERR=0
-	# Add anoying beep to blacklist
+	# Supress anoying beep
 	echo -e "${BLUE}Blacklisting speaker${NC}"
 	echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf || ERR=1
 
@@ -125,7 +134,7 @@ function deepin_dde
     ERR=0
 	# Adding some nice touch :D
 	echo -e "${BLUE}Installing deepin${NC}"
-	pacman -S `echo $DEEPIN` --noconfirm || ERR=1
+	pacman -S `echo $DEEPIN` --noconfirm 1>/dev/null || ERR=1
 	echo "greeter-session=lightdm-deepin-greeter" >> /etc/lightdm/lightdm.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
