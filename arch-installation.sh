@@ -118,6 +118,6 @@ EOF
 
 print_pretty_header "Unmounting partitions"
 umount /mnt/linux
-print_pretty_header "Computer will shutdown. Power it on and run ./snackk-setup.sh"
+print_pretty_header "Computer will shutdown. Power it on and run ./environment-setup.sh"
 shutdown -h +1 ""
 
