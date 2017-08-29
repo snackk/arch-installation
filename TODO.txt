@@ -1,6 +1,7 @@
 snackk-installation
-	Deepin greeter must be put in the exact spot, right bellow of [seat]
-	systemctl enable NetworkManager.service -> DDE
-	systemctl enable lightdm.service -> DDE
-	before installing aur, sudoers file must be edit!
-check /etc/hosts
+
+/etc/resolv.conf
+# Google IPv4 nameservers
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+

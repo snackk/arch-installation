@@ -3,7 +3,7 @@
 
 source snackk.conf
 
-to_install=8;
+to_install=10;
 success=0
 
 ##################################################
@@ -80,6 +80,22 @@ function pacman_config
     fi
 }
 
+function sudoers
+{
+    ERR=0
+    # Setting sudoers file
+    echo -e "${BLUE}Setting sudoers${NC}"
+    sed -i -e 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
+    sed -i -e 's/# %sudo ALL=(ALL) ALL/%sudo ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
+
+    if [[ $ERR -eq 1 ]]; then
+        echo "Sudoers error."
+        exit 1
+    else
+        let success+=1;
+    fi
+}
+
 function aur_dependecies
 {
     ERR=0
@@ -135,13 +151,29 @@ function deepin_dde
 	# Adding some nice touch :D
 	echo -e "${BLUE}Installing deepin${NC}"
 	pacman -S `echo $DEEPIN` --noconfirm 1>/dev/null || ERR=1
-	echo "greeter-session=lightdm-deepin-greeter" >> /etc/lightdm/lightdm.conf || ERR=1
+	sed -i -e 's/greeter-session=example-gnome-gtk/greeter-session=lightdm-deepin-greeter/g' /etc/lightdm/lightdm.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Deepin dde error."
         exit 1
     else
     	let success+=1;
+    fi
+}
+
+function enable_sysctl
+{
+    ERR=0
+    # Daemons
+    echo -e "${BLUE}Enabling daemons${NC}"
+    systemctl enable NetworkManager.service 1>/dev/null || ERR=1
+    systemctl enable lightdm.service 1>/dev/null || ERR=1
+
+    if [[ $ERR -eq 1 ]]; then
+        echo "Systemctl error."
+        exit 1
+    else
+        let success+=1;
     fi
 }
 
@@ -153,10 +185,12 @@ run_osprober
 add_user
 set_user_passwd
 pacman_config
-#aur_dependecies
+sudoers
+aur_dependecies
 pacman_dependecies
 blacklist
 deepin_dde
+enable_sysctl
 
 print_results
 print_line
