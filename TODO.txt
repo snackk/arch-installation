@@ -1,7 +1,2 @@
-snackk-installation
-
-/etc/resolv.conf
-# Google IPv4 nameservers
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-
+sudo pacman -S squashfs-tools
+sudo pacman -S cdrtools
