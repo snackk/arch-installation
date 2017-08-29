@@ -104,7 +104,7 @@ function aur_dependecies
 	print_pretty_header "Downloading yaourt"
 	pacman -Sy yaourt --noconfirm 1>/dev/null || ERR=1
 	print_pretty_header "Downloading hardware dependencies"
-        $ROOT_PASSWD | sudo -u	snackk yaourt -S `echo $AUR_PKGS` --noconfirm 1>/dev/null || ERR=1
+        $ROOT_PASSWD"\n"$ROOT_PASSWD | sudo -u	snackk yaourt -S `echo $AUR_PKGS` --noconfirm 1>/dev/null || ERR=1
 	print_pretty_header "Rebuilding linux headers"	
 	mkinitcpio -p linux 1>/dev/null || ERR=1
 
@@ -135,7 +135,7 @@ function blacklist
 {
     ERR=0
 	# Supress anoying beep
-	print_pretty_header "Blacklisting speaker$"
+	print_pretty_header "Blacklisting speaker"
 	echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -152,7 +152,7 @@ function deepin_dde
 	# Adding some nice touch :D
 	print_pretty_header "Installing Deepin"
 	pacman -S `echo $DEEPIN` --noconfirm 1>/dev/null || ERR=1
-	sed -i -e 's/greeter-session=example-gtk-gnome/greeter-session=lightdm-deepin-greeter/g' /etc/lightdm/lightdm.conf || ERR=1
+	sed -i -e 's/#greeter-session=example-gtk-gnome/greeter-session=lightdm-deepin-greeter/g' /etc/lightdm/lightdm.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Deepin dde error."

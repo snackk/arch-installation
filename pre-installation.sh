@@ -99,8 +99,8 @@ mount_root_boot_partitions
 install_system
 
 ### Copy necessary files
-cp snackk.conf /mnt/linux/arch-installation
-cp *.sh /mnt/linux/arch-installation
+cp snackk.conf /mnt/linux
+cp *.sh /mnt/linux
 
 ### Unmount boot partition
 umount /mnt/boot

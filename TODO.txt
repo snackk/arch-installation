@@ -1,2 +1,3 @@
 sudo pacman -S squashfs-tools
 sudo pacman -S cdrtools
+Adicionar tema ao grub
