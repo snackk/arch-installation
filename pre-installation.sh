@@ -62,9 +62,9 @@ function install_system
 {
     ERR=0
     echo -e "${BLUE}Running pacstrap${NC}"
-    pacstrap /mnt/linux base base-devel || ERR=1
+    pacstrap /mnt/linux base base-devel 1>/dev/null || ERR=1
     echo -e "${BLUE}Generating File System Table${NC}"
-    genfstab -p /mnt/linux >> /mnt/linux/etc/fstab || ERR=1
+    genfstab -p /mnt/linux >> /mnt/linux/etc/fstab 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         print_results "Pacstrap error."
@@ -105,28 +105,18 @@ cp *.sh /mnt/linux
 ### Unmount boot partition
 umount /mnt/boot
 
-#### chroot and configure the base system
-arch-chroot /mnt/linux << EOF
 print_results
 if [[ $success -ne $to_install ]]; then
-    echo -e "${RED}Please fix the errors and come back again.${NC}"
+    echo -e "${RED}Please fix the errors and run it again.${NC}"
     exit 0
-fi  
-
+fi
 print_line
 
-while true; do
-    read -p "Continue to post-installation [y/n]? " yn
-    case $yn in
-        [Yy]* ) echo "Good luck..."; break;;
-        [Nn]* ) echo "Bye."; exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
+#### chroot and configure the base system
+arch-chroot /mnt/linux << EOF  
 
-echo "Running ./post-installation.sh"
 ./post-installation.sh
-EOF
+exit
 
 echo -e "${BLUE}Unmounting partitions${NC}"
 umount /mnt/linux
