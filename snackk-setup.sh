@@ -7,7 +7,7 @@ to_install=11;
 success=0
 
 ##################################################
-#              SNACKK-INSTALLATION               #
+#                  SNACKK-SETUP                  #
 ##################################################
 
 function run_osprober
