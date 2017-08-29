@@ -6,14 +6,14 @@ source snackk.conf
 to_install=10;
 
 ##################################################
-#               POST-INSTALLATION                #
+#              ARCH-CONFIGURATION                #
 ##################################################
 
 function set_hostname
 {
     ERR=0
 	# Hostname
-	print_pretty_header "Setting Hostname"
+	print_pretty_header "Setting Hostname${NC} $HOSTN"
 	echo $HOSTN > /etc/hostname || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -24,11 +24,11 @@ function set_hostname
     fi
 }
 
-function keyboard_layout
+function set_keyboard_layout
 {
     ERR=0
 	# Keybord Layout
-	print_pretty_header "Setting Keyboard layout"
+	print_pretty_header "Setting Keyboard layout${NC} $KEYBOARD_LAYOUT"
 	echo 'KEYMAP='$KEYBOARD_LAYOUT > /etc/vconsole.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -39,16 +39,16 @@ function keyboard_layout
     fi
 }
 
-function gen_locale
+function set_locale
 {
     ERR=0
-	# Locale locale.gen
-	print_pretty_header "Setting locale"
+	# Locale
+	print_pretty_header "Setting locale${NC} $LANGUAGE"
 	sed -i 's/^#'$LANGUAGE'/'$LANGUAGE/ /etc/locale.gen || ERR=1
 	locale-gen 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        print_results "Locale gen error."
+        print_results "Locale error."
         exit 1
     else
     	let success+=1;
@@ -59,7 +59,7 @@ function set_language
 {
     ERR=0
 	# Locale locale.conf
-	print_pretty_header "Configuring language"
+	print_pretty_header "Setting language${NC} $LANGUAGE"
 	export LANG=$LANGUAGE'.utf-8'
 	echo 'LANG='$LANGUAGE'.utf-8' > /etc/locale.conf
 
@@ -75,7 +75,7 @@ function set_timezone
 {
     ERR=0
 	# Time zone
-	print_pretty_header "Configuring time zone"
+	print_pretty_header "Setting time zone${NC} $LOCALE"
 	ln -sf /usr/share/zoneinfo/$LOCALE /etc/localtime || ERR=1
 	echo $LOCALE > /etc/timezone
 	#hwclock --systohc --utc
@@ -88,11 +88,11 @@ function set_timezone
     fi
 }
 
-function initial_ramdisk
+function set_initial_ramdisk
 {
     ERR=0
-	# Create an initial ramdisk environment
-	print_pretty_header "Creating initial ramdisk"
+	# Setting an initial ramdisk environment
+	print_pretty_header "Setting initial ramdisk"
 	mkinitcpio -p linux 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -107,7 +107,7 @@ function set_root_passwd
 {
     ERR=0
 	# Setting root password
-	print_pretty_header "Changing root password"
+	print_pretty_header "Setting root password${NC} $ROOT_PASSWD"
 	echo -e $ROOT_PASSWD"\n"$ROOT_PASSWD | passwd
 
     if [[ $ERR -eq 1 ]]; then
@@ -118,11 +118,11 @@ function set_root_passwd
     fi
 }
 
-function basic_dependencies
+function install_basic_dependencies
 {
     ERR=0
-	#Installing basic installation dependencies
-	print_pretty_header "Running pacman -S${NC} $BASIC_PKGS"
+	# Installing basic installation dependencies
+	print_pretty_header "Installing${NC} $BASIC_PKGS"
 	pacman -S `echo $BASIC_PKGS` --noconfirm 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -133,12 +133,12 @@ function basic_dependencies
     fi
 }
 
-function efi
+function install_efi
 {
     ERR=0
 	# Install EFI
-    	mkdir /mnt/boot || ERR=1
-    	mount /dev/$EFI_BOOT /mnt/boot || ERR=1
+	mkdir /mnt/boot || ERR=1
+	mount /dev/$EFI_BOOT /mnt/boot || ERR=1
 	print_pretty_header "Installing EFI on${NC} /dev/$EFI_BOOT"
 	grub-install --target=x86_64-efi --efi-directory=/mnt/boot --bootloader-id=grub --boot-directory=/mnt/boot 1>/dev/null || ERR=1
 
@@ -150,11 +150,11 @@ function efi
     fi
 }
 
-function grub
+function install_grub
 {
     ERR=0
 	# Making grub config
-	print_pretty_header "Making grub config"
+	print_pretty_header "Installing grub on${NC} /dev/$EFI_BOOT"  
 	grub-mkconfig -o /mnt/boot/grub/grub.cfg 1>/dev/null || ERR=1
 	umount /mnt/boot
 
@@ -167,19 +167,19 @@ function grub
 }
 
 ##################################################
-#           		Script                   #
+#           		Script                       #
 ##################################################
 
 set_hostname
-keyboard_layout
-gen_locale
+set_keyboard_layout
+set_locale
 set_language
 set_timezone
-initial_ramdisk
+set_initial_ramdisk
 set_root_passwd
-basic_dependencies
-efi
-grub
+install_basic_dependencies
+install_efi
+install_grub
 
 print_results 
 print_line

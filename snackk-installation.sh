@@ -14,7 +14,7 @@ function run_osprober
 {
     ERR=0
 	# OS-prober
-	print_pretty_header "Running OS-prober"
+	print_pretty_header "Running OS-prober${NC} /dev/$EFI_BOOT"
 	os-prober 1>/dev/null || ERR=1
 	mount /dev/$EFI_BOOT /mnt/boot
 	grub-mkconfig -o /mnt/boot/grub/grub.cfg 1>/dev/null || ERR=1
@@ -32,7 +32,7 @@ function add_user
 {
     ERR=0
 	# Add user
-	print_pretty_header "Setting user${NC} $USERN"
+	print_pretty_header "Adding user${NC} $USERN"
 	useradd -m -G wheel -s /bin/bash $USERN || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -47,7 +47,7 @@ function set_user_passwd
 {
     ERR=0
 	# Setting $USERN password
-	print_pretty_header "Setting $USERN password"
+	print_pretty_header "Setting password${NC} $ROOT_PASSWD"
 	echo -e $ROOT_PASSWD"\n"$ROOT_PASSWD | passwd $USERN
 
     if [[ $ERR -eq 1 ]]; then
@@ -62,7 +62,7 @@ function pacman_config
 {
     ERR=0
 	# Configure pacman
-	print_pretty_header "Adding Multilib & AUR$"
+	print_pretty_header "Adding multilib & aur"
 	echo "" >> /etc/pacman.conf || ERR=1
 	echo "[multilib]" >> /etc/pacman.conf || ERR=1
 	echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf || ERR=1
@@ -81,7 +81,7 @@ function pacman_config
     fi
 }
 
-function sudoers
+function set_sudoers
 {
     ERR=0
     # Setting sudoers file
@@ -103,9 +103,9 @@ function aur_dependecies
 	# Downloading AUR dependencies
 	print_pretty_header "Downloading yaourt"
 	pacman -Sy yaourt --noconfirm 1>/dev/null || ERR=1
-	print_pretty_header "Downloading hardware dependencies"
+	print_pretty_header "Installing${NC} $AUR_PKGS"
         $ROOT_PASSWD"\n"$ROOT_PASSWD | sudo -u	snackk yaourt -S `echo $AUR_PKGS` --noconfirm 1>/dev/null || ERR=1
-	print_pretty_header "Rebuilding linux headers"	
+	print_pretty_header "Resetting initial ramdisk"	
 	mkinitcpio -p linux 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -120,7 +120,7 @@ function pacman_dependecies
 {
     ERR=0
 	# Downloading PACMAN dependencies
-	print_pretty_header "Downloading pacman dependencies"
+	print_pretty_header "Installing${NC} $PAC_PKGS"
 	pacman -S `echo $PAC_PKGS` --noconfirm 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
@@ -131,7 +131,7 @@ function pacman_dependecies
     fi
 }
 
-function blacklist
+function blacklist_speaker
 {
     ERR=0
 	# Supress anoying beep
@@ -162,27 +162,27 @@ function deepin_dde
     fi
 }
 
-function enable_sysctl
+function enable_sysctl_daemons
 {
     ERR=0
     # Daemons
-    print_pretty_header "Enabling daemons"
+    print_pretty_header "Enabling NetworkManager and Lightdm"
     systemctl enable NetworkManager.service 1>/dev/null || ERR=1
     systemctl enable lightdm.service 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "Systemctl error."
+        echo "Systemctl daemons error."
         exit 1
     else
         let success+=1;
     fi
 }
 
-function dns
+function set_dns
 {
     ERR=0
     # Google's DNS
-    print_pretty_header "Setting Google DNS"
+    print_pretty_header "Setting Google's DNS"
     echo "[main]" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
     echo "dns=none" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
     rm /etc/resolv.conf
@@ -207,13 +207,13 @@ run_osprober
 add_user
 set_user_passwd
 pacman_config
-sudoers
+set_sudoers
 aur_dependecies
 pacman_dependecies
-blacklist
+blacklist_speaker
 deepin_dde
-enable_sysctl
-dns
+enable_sysctl_daemons
+set_dns
 
 print_results
 print_line
