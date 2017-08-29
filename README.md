@@ -54,7 +54,7 @@ $ ./snackk-setup.sh
 ```sh
 $ chmod +x arch-installation.sh arch-configuration.sh snackk-setup.sh
 ```
-###Disclaimer
+### Disclaimer
 I am not responsible for any damage to your machine. Run at your own risk
   
   Written by Diogo Santos.
