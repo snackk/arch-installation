@@ -28,6 +28,7 @@ function aur_dependecies
 {
     ERR=0
     # Downloading AUR dependencies
+    #BUG! Only listens for first. Split AUR_PKGS?
     print_pretty_header "Downloading yaourt"
     pacman -Sy yaourt --noconfirm 1>/dev/null || ERR=1
     print_pretty_header "Installing${NC} $AUR_PKGS"
