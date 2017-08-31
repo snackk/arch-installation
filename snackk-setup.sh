@@ -16,7 +16,7 @@ function pacman_dependecies
     print_pretty_header "Installing${NC} $SNK_CUSTOM"
     
     #BUG sudo -S not working!
-    echo -e $ROOT_PASSWD | sudo -S pacman -S `echo $SNK_CUSTOM` --noconfirm 1>/dev/null || ERR=1
+    echo -e $ROOT_PASSWD | sudo -S pacman -S `echo $SNK_CUSTOM` --noconfirm || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Pacman dependencies error."
