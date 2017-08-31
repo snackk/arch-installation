@@ -56,7 +56,7 @@ function install_oh_my_zsh
     fi
 }
 
-function install_powerline
+function install_zsh_powerline
 {
     ERR=0
     print_pretty_header "Installing powerline"
@@ -103,7 +103,7 @@ function install_config_files
 pacman_dependecies
 set_zsh
 install_oh_my_zsh
-install_powerline
+install_zsh_powerline
 install_config_files
 
 print_results

@@ -28,13 +28,12 @@ function aur_dependecies
 {
     ERR=0
     # Downloading AUR dependencies
-    #BUG! Only listens for first. Split AUR_PKGS?
     print_pretty_header "Downloading yaourt"
-    pacman -Sy yaourt --noconfirm 1>/dev/null || ERR=1
+    echo -e $ROOT_PASSWD | sudo -S pacman -Sy yaourt --noconfirm || ERR=1
     print_pretty_header "Installing${NC} $AUR_PKGS"
-        $ROOT_PASSWD"\n"$ROOT_PASSWD | sudo -u  snackk yaourt -S `echo $AUR_PKGS` --noconfirm 1>/dev/null || ERR=1
+    yaourt -S `echo $AUR_PKGS` --noconfirm 1>/dev/null || ERR=1
     print_pretty_header "Resetting initial ramdisk" 
-    mkinitcpio -p linux 1>/dev/null || ERR=1
+    echo -e $ROOT_PASSWD | sudo -S mkinitcpio -p linux || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "AUR dependencies error."
