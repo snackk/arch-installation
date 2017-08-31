@@ -15,6 +15,8 @@ OUTPUT_ISO=$(BUILD_DIR)/out
 
 LABEL=SNACKK_$(shell date +%Y%m)
 
+ARCH_LABEL := $(shell iso-info -d -i $(ISO) | grep "Volume" | cut -c15-25)
+
 build-all: build-64 iso clean
 
 build-32: 
@@ -90,7 +92,7 @@ ifeq (GENISOIMAGE,)
 endif
 	@echo "#############################"
 	@echo "Building new ISO..."
-	@genisoimage -l -r -J -V "ARCH_201708" -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -c isolinux/boot.cat -o ./build/out/snackk-archlinux-`date +%Y.%m.%d`-dual.iso $(CUSTOM_ISO_DIR)
+	@genisoimage -l -r -J -V $(ARCH_LABEL) -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -c isolinux/boot.cat -o ./build/out/snackk-archlinux-`date +%Y.%m.%d`-dual.iso $(CUSTOM_ISO_DIR)
 	@sudo chmod a+rw ./build/out/*
 
 	@echo "#############################"
