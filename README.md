@@ -10,7 +10,7 @@ Before anything, a customized image of arch-linux must be built, for the scripts
 * **arch-installation** - Installs arch-linux.
 * **arch-configuration** - Sets up hostname, keyboard, language, timezone, root password and installs dependencies and grub.
 * **environment-setup** - Sets up a graphical environment with Deepin.
-* **snackk-setup** - *(Optional)* After arch-linux has been installed, populates arch with a bunch of configs that i use for my own personal use. You can find those configs here [Config-Files](https://github.com/snackk/config-files).
+* **snackk-setup** - *(Optional)* After arch-linux has been installed, populates arch with a bunch of configs that i use for my own personal use. You can find those configs here [arch-config-Files](https://github.com/snackk/arch-config-files).
 * **toshiba-s50-b131-setup** - *(Optional)* Specific hardware configuration for my laptop.
 
 ### Customizing image

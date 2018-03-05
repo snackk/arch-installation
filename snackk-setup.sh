@@ -81,15 +81,15 @@ function install_zsh_powerline
 function install_config_files
 {
     ERR=0
-    print_pretty_header "Installing config-files"
+    print_pretty_header "Installing arch-config-files"
     cd $HOME/git 1>/dev/null || ERR=1
-    git clone https://github.com/snackk/config-files 1>/dev/null || ERR=1
+    git clone https://github.com/snackk/arch-config-files 1>/dev/null || ERR=1
     # install
-    cd config-files 1>/dev/null || ERR=1
+    cd arch-config-files 1>/dev/null || ERR=1
     ./install.sh 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "Config-files error."
+        echo "arch-config-files error."
         exit 1
     else
         let success+=1;
