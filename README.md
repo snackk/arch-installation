@@ -45,7 +45,7 @@ $ dhcpcd
 ```sh
 $ ./arch-installation.sh
 ```
- * After it shutdown, turn it back on, and then run:
+ * After it shutdown, turn it back on. Connect to the internet again and then run:
 ```sh
 $ ./environment-setup.sh
 ```
