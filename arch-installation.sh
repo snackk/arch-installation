@@ -3,7 +3,7 @@
 
 source snackk.conf
 
-to_install=3;
+to_install=4;
 
 ##################################################
 #               ARCH-INSTALLATION                #
@@ -21,6 +21,23 @@ function welcome
     echo "        -> Go grab a coffee & chill"
     print_line
     read -e -sn 1 -p "Press enter to continue..."
+}
+
+function make_mirrorlist_by_speed
+{
+    ERR=0
+    # Orders the mirrorlist by speed
+    print_pretty_header "Ordering mirrorlist by speed:${NC} /etc/pacman.d/mirrorlist"
+    cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup 1>/dev/null || ERR=1
+    sed -i 's/^#Server/Server' /etc/pacman.d/mirrorlist.backup 1>/dev/null || ERR=1
+    rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist 1>/dev/null || ERR=1
+
+    if [[ $ERR -eq 1 ]]; then
+        print_results "Mirrorlist error."
+        exit 1
+    else
+        let success+=1;
+    fi
 }
 
 function make_root_fs
@@ -91,6 +108,7 @@ done
 
 #### Preparation for the install
 welcome
+make_mirrorlist_by_speed
 make_root_fs
 mount_root_boot_partitions
 
