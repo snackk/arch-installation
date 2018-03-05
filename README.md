@@ -49,6 +49,10 @@ $ ./arch-installation.sh
 ```sh
 $ ./environment-setup.sh
 ```
+ * To install zsh and custom arch-config-files run:
+```sh
+$ ./snackk-setup.sh
+```
 * You're good to go :D
  
  ### Problems
