@@ -29,7 +29,7 @@ function make_mirrorlist_by_speed
     # Orders the mirrorlist by speed
     print_pretty_header "Ordering mirrorlist by speed:${NC} /etc/pacman.d/mirrorlist"
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup 1>/dev/null || ERR=1
-    sed -i 's/^#Server/Server' /etc/pacman.d/mirrorlist.backup 1>/dev/null || ERR=1
+    sed -i 's/^#Server/Server/' /etc/pacman.d/mirrorlist.backup 1>/dev/null || ERR=1
     rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
