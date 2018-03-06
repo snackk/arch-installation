@@ -49,6 +49,11 @@ $ ./arch-installation.sh
 ```sh
 $ ./environment-setup.sh
 ```
+ * Next some hardware configs:
+```sh
+$ ./toshiba-s50-b131-setup.sh
+$ reboot
+```
  * To install zsh and custom arch-config-files run:
 ```sh
 $ ./snackk-setup.sh
