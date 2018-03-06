@@ -1,4 +1,4 @@
-# arch-installation
+# Arch installation
 
 ## Overview
 
