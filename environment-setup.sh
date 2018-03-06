@@ -63,6 +63,7 @@ function add_repositories
     ERR=0
 	# Configure pacman
 	print_pretty_header "Adding multilib & aur"
+    sed -i '/^#VerbosePkgLists/ a ILoveCandy' /etc/pacman.conf || ERR=1
 	echo "" >> /etc/pacman.conf || ERR=1
 	echo "[multilib]" >> /etc/pacman.conf || ERR=1
 	echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf || ERR=1
