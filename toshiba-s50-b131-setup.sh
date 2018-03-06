@@ -31,7 +31,7 @@ function aur_dependecies
     print_pretty_header "Downloading yaourt"
     echo -e $ROOT_PASSWD | sudo -S pacman -Sy yaourt --noconfirm || ERR=1
     print_pretty_header "Installing${NC} $AUR_PKGS"
-    yaourt -S `echo $AUR_PKGS` --noconfirm 1>/dev/null || ERR=1
+    sudo -i -u $USERN yaourt -S `echo $AUR_PKGS` --noconfirm 1>/dev/null || ERR=1
     print_pretty_header "Resetting initial ramdisk" 
     echo -e $ROOT_PASSWD | sudo -S mkinitcpio -p linux || ERR=1
 
