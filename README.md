@@ -1,9 +1,5 @@
 # arch-installation
 
-## Credits
-
-This script is based on this project [Anarchy](https://github.com/magnunleno/Anarchy), they made a huge effort on customizing the arch-linux iso, I've just made a few tweaks so it would run on the newest arch-linux image.
-
 ## Overview
 
 Before anything, a customized image of arch-linux must be built, for the scripts to be on the bootable image of arch-linux. After that, the installation is divided in several stages:
@@ -87,6 +83,10 @@ $ ./snackk-setup.sh
 ```sh
 $ chmod +x *.sh
 ```
+
+## Acknowledgements
+
+The script to make a custom image of arch-linux is based on this project [Anarchy](https://github.com/magnunleno/Anarchy), they made a huge effort on making it happen, I've just made a few tweaks and changes so it would run on the newest arch-linux image.
 
 ## Disclaimer
 
