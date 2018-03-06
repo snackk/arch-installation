@@ -49,7 +49,7 @@ $ ./arch-installation.sh
 ```sh
 $ ./environment-setup.sh
 ```
- * Next some hardware configs:
+ * Next some hardware configs (Password needed here):
 ```sh
 $ ./toshiba-s50-b131-setup.sh
 $ reboot
