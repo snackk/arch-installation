@@ -56,8 +56,10 @@ $ dhcpcd
 $ ./arch-installation.sh
 ```
 
- * After it shutdown, turn it back on. Connect to the [internet](#internet) again and then run:
+ * After it shutdown, turn it back on (Default login is *root* and *password*).
+ Connect to the [internet](#internet) again and then run:
 ```sh
+$ cd /
 $ ./environment-setup.sh
 ```
 
