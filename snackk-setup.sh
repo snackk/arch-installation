@@ -3,7 +3,7 @@
 
 source snackk.conf
 
-to_install=6;
+to_install=7;
 
 ##################################################
 #                  SNACKK-SETUP                  #
@@ -20,6 +20,24 @@ function pacman_dependecies
 
     if [[ $ERR -eq 1 ]]; then
         echo "Pacman dependencies error."
+        exit 1
+    else
+        let success+=1;
+    fi
+}
+
+function grub_theme
+{
+    ERR=0
+    # Downloading grub theme
+    print_pretty_header "Installing${NC} $GRUB_THEME"
+    sudo -i -u $USERN yaourt -S `echo $GRUB_THEME` --noconfirm 1>/dev/null || ERR=1
+    echo -e $ROOT_PASSWD | echo 'GRUB_THEME="/boot/grub/themes/Vimix/theme.txt"' | sudo tee -a /etc/default/grub > /dev/null || ERR=1
+    echo -e $ROOT_PASSWD | sudo -S mount /dev/$EFI_BOOT /mnt || ERR=1
+    echo -e $ROOT_PASSWD | sudo -S grub-mkconfig -o /mnt/boot/grub/grub.cfg 1>/dev/null || ERR=1 
+
+    if [[ $ERR -eq 1 ]]; then
+        echo "Grub theme error."
         exit 1
     else
         let success+=1;
@@ -117,6 +135,7 @@ function install_config_files
 ##################################################
 
 pacman_dependecies
+grub_theme
 set_zsh
 install_oh_my_zsh
 install_zsh_powerline

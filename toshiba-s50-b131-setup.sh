@@ -24,19 +24,19 @@ function blacklist_speaker
     fi
 }
 
-function aur_dependecies
+function hardware_dependecies
 {
     ERR=0
-    # Downloading AUR dependencies
-    print_pretty_header "Downloading yaourt"
+    # Downloading Hardware dependencies
+    print_pretty_header "Downloading hardware dependencies"
     echo -e $ROOT_PASSWD | sudo -S pacman -Sy yaourt --noconfirm || ERR=1
-    print_pretty_header "Installing${NC} $AUR_PKGS"
-    sudo -i -u $USERN yaourt -S `echo $AUR_PKGS` --noconfirm 1>/dev/null || ERR=1
+    print_pretty_header "Installing${NC} $HARDWARE_PKGS"
+    sudo -i -u $USERN yaourt -S `echo $HARDWARE_PKGS` --noconfirm 1>/dev/null || ERR=1
     print_pretty_header "Resetting initial ramdisk" 
     echo -e $ROOT_PASSWD | sudo -S mkinitcpio -p linux || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "AUR dependencies error."
+        echo "Hardware dependencies error."
         exit 1
     else
         let success+=1;
@@ -48,7 +48,7 @@ function aur_dependecies
 ##################################################
 
 blacklist_speaker
-aur_dependecies
+hardware_dependecies
 
 print_results
 print_line
