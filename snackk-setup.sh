@@ -3,7 +3,7 @@
 
 source snackk.conf
 
-to_install=5;
+to_install=6;
 
 ##################################################
 #                  SNACKK-SETUP                  #
@@ -78,6 +78,22 @@ function install_zsh_powerline
     fi
 }
 
+function install_awesome_vimrc
+{
+    ERR=0
+    print_pretty_header "Installing an awesome vimrc"
+    git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime 1>/dev/null || ERR=1
+    # install
+    sh ~/.vim_runtime/install_awesome_vimrc.sh 1>/dev/null || ERR=1
+
+    if [[ $ERR -eq 1 ]]; then
+        echo "Vimrc error."
+        exit 1
+    else
+        let success+=1;
+    fi
+}
+
 function install_config_files
 {
     ERR=0
@@ -104,6 +120,7 @@ pacman_dependecies
 set_zsh
 install_oh_my_zsh
 install_zsh_powerline
+install_awesome_vimrc
 install_config_files
 
 print_results
