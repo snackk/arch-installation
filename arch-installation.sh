@@ -3,7 +3,7 @@
 
 source snackk.conf
 
-to_install=4;
+to_install=3;
 
 ##################################################
 #               ARCH-INSTALLATION                #
@@ -108,7 +108,7 @@ done
 
 #### Preparation for the install
 welcome
-make_mirrorlist_by_speed
+#make_mirrorlist_by_speed #mirrolist inst working as of right now on arch-linux
 make_root_fs
 mount_root_boot_partitions
 

@@ -148,15 +148,15 @@ function enable_sysctl_daemons
 function set_dns
 {
     ERR=0
-    # Google's DNS
-    print_pretty_header "Setting Google's DNS"
+    # CloudFlare's DNS
+    print_pretty_header "Setting CloudFlare DNS"
     echo "[main]" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
     echo "dns=none" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
     rm /etc/resolv.conf
     touch /etc/resolv.conf
     echo "# Google IPv4 nameservers" >> /etc/resolv.conf || ERR=1
-    echo "nameserver 8.8.8.8" >> /etc/resolv.conf || ERR=1
-    echo "nameserver 8.8.4.4" >> /etc/resolv.conf || ERR=1	
+    echo "nameserver 1.1.1.1" >> /etc/resolv.conf || ERR=1
+    echo "nameserver 1.0.0.1" >> /etc/resolv.conf || ERR=1	
 
     if [[ $ERR -eq 1 ]]; then
         echo "DNS error."
