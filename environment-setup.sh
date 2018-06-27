@@ -154,7 +154,7 @@ function set_dns
     echo "dns=none" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
     rm /etc/resolv.conf
     touch /etc/resolv.conf
-    echo "# Google IPv4 nameservers" >> /etc/resolv.conf || ERR=1
+    echo "# CloudFlare IPv4 nameservers" >> /etc/resolv.conf || ERR=1
     echo "nameserver 1.1.1.1" >> /etc/resolv.conf || ERR=1
     echo "nameserver 1.0.0.1" >> /etc/resolv.conf || ERR=1	
 
