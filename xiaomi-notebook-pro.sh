@@ -6,7 +6,7 @@ source snackk.conf
 to_install=2;
 
 ##################################################
-#             XIAOMI-NOTEBOOK-PRO-INSTALLATION      #
+#        XIAOMI-NOTEBOOK-PRO-INSTALLATION        #
 ##################################################
 
 HARDWARE_PKGS='aic94xx-firmware wd719x-firmware'
