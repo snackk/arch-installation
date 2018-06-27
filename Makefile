@@ -116,7 +116,7 @@ endif
 
 	@echo "Mounting ISO"
 	@sudo mount -t iso9660 -o loop $(ISO) $(ISO_MOUNT_DIR)
-	@echo -n "Coping files..."
+	@echo -n "Copying files..."
 	@cp -a $(ISO_MOUNT_DIR)/* $(CUSTOM_ISO_DIR)
 	@-sudo umount $(ISO_MOUNT_DIR)
 	@echo -n " Umounting ISO"

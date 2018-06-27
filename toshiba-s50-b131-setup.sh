@@ -6,8 +6,10 @@ source snackk.conf
 to_install=2;
 
 ##################################################
-#             TOSHIBA-INSTALLATION               #
+#             TOSHIBA-S50-B131-INSTALLATION      #
 ##################################################
+
+HARDWARE_PKGS='aic94xx-firmware wd719x-firmware'
 
 function blacklist_speaker
 {
