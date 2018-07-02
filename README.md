@@ -3,11 +3,15 @@
 ## Overview
 
 Before anything, a customized image of arch-linux must be built, for the scripts to be on the bootable image of arch-linux. After that, the installation is divided in several stages:
+
 * **arch-installation** - *(needed)* Installs arch-linux base system.
 * **arch-configuration** - *(needed)* Sets up hostname, keyboard, language, timezone, root password and installs some dependencies along with grub, to boot the newly installed system.
 * **environment-setup** - *(needed)* Sets up a graphical environment with Deepin.
 * **snackk-setup** - *(Optional)* Installs [arch-config-files](https://github.com/snackk/arch-config-files).
-* **toshiba-s50-b131-setup** - *(Optional)* Specific hardware configuration for my laptop. 
+
+* **toshiba-s50-b131-setup** - *(Warning)* Specific hardware configuration for this particular laptop.
+* **xiaomi-notebook-pro-setup** - *(Warning)* Specific hardware configuration for this particular laptop.
+
 
 ## Customizing image
 
