@@ -85,7 +85,6 @@ build-64: _base
 	@echo ""
 
 
-#Writes ISO
 iso:
 ifeq (GENISOIMAGE,)
 	$(error genisoimage command not found! Please install the cdrkit package.)
@@ -100,7 +99,6 @@ endif
 	@echo ""
 
 
-#Mounts ISO and copy it to CUSTOM
 _base:
 ifeq (UNSQUASHFS,)
 	$(error unsquashfs command not found! Please install the squashfs-tools package.)
