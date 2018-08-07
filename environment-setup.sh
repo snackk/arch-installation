@@ -63,14 +63,14 @@ function add_repositories
     ERR=0
 	# Configure pacman
 	print_pretty_header "Adding multilib & aur"
-    sed -i '/^#VerbosePkgLists/ a ILoveCandy' /etc/pacman.conf || ERR=1
+               sed -i '/^#VerbosePkgLists/ a ILoveCandy' /etc/pacman.conf || ERR=1
 	echo "" >> /etc/pacman.conf || ERR=1
 	echo "[multilib]" >> /etc/pacman.conf || ERR=1
 	echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf || ERR=1
 	echo "" >> /etc/pacman.conf || ERR=1
 	echo "[archlinuxfr]" >> /etc/pacman.conf || ERR=1
 	echo "SigLevel = Never" >> /etc/pacman.conf || ERR=1
-	echo "Server = http://repo.archlinux.fr/\$arch" >> /etc/pacman.conf || ERR=1
+	echo "Server = http://repo.archlinux.fr/x86_64" >> /etc/pacman.conf || ERR=1
 	print_pretty_header "Updating repositories"
 	pacman -Syy 1>/dev/null || ERR=1
 
@@ -85,10 +85,10 @@ function add_repositories
 function set_sudoers
 {
     ERR=0
-    # Setting sudoers file
-    print_pretty_header "Setting up sudoers"
-    sed -i -e 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
-    sed -i -e 's/# %sudo ALL=(ALL) ALL/%sudo ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
+               # Setting sudoers file
+               print_pretty_header "Setting up sudoers"
+               sed -i -e 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
+               sed -i -e 's/# %sudo ALL=(ALL) ALL/%sudo ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Sudoers error."
@@ -98,15 +98,15 @@ function set_sudoers
     fi
 }
 
-function pacman_dependecies
+function pacman_display_dependecies
 {
     ERR=0
-	# Downloading PACMAN dependencies
-	print_pretty_header "Installing${NC} $PAC_PKGS"
-	pacman -S `echo $PAC_PKGS` --noconfirm 1>/dev/null || ERR=1
+	# Downloading pacman display dependencies
+	print_pretty_header "Installing${NC} $DISPLAY_PKGS"
+	pacman -S `echo $DISPLAY_PKGS` --noconfirm 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
-        echo "Pacman dependencies error."
+        echo "Pacman Display dependencies error."
         exit 1
     else
     	let success+=1;
@@ -132,10 +132,10 @@ function deepin_dde
 function enable_sysctl_daemons
 {
     ERR=0
-    # Daemons
-    print_pretty_header "Enabling NetworkManager and Lightdm"
-    systemctl enable NetworkManager.service 1>/dev/null || ERR=1
-    systemctl enable lightdm.service 1>/dev/null || ERR=1
+               # Daemons
+               print_pretty_header "Enabling NetworkManager and Lightdm"
+               systemctl enable NetworkManager.service 1>/dev/null || ERR=1
+               systemctl enable lightdm.service 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Systemctl daemons error."
@@ -148,15 +148,15 @@ function enable_sysctl_daemons
 function set_dns
 {
     ERR=0
-    # CloudFlare's DNS
-    print_pretty_header "Setting CloudFlare DNS"
-    echo "[main]" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
-    echo "dns=none" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
-    rm /etc/resolv.conf
-    touch /etc/resolv.conf
-    echo "# CloudFlare IPv4 nameservers" >> /etc/resolv.conf || ERR=1
-    echo "nameserver 1.1.1.1" >> /etc/resolv.conf || ERR=1
-    echo "nameserver 1.0.0.1" >> /etc/resolv.conf || ERR=1	
+               # CloudFlare's DNS
+               print_pretty_header "Setting CloudFlare DNS"
+               echo "[main]" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
+               echo "dns=none" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
+               rm /etc/resolv.conf
+               touch /etc/resolv.conf
+               echo "# CloudFlare IPv4 nameservers" >> /etc/resolv.conf || ERR=1
+               echo "nameserver 1.1.1.1" >> /etc/resolv.conf || ERR=1
+               echo "nameserver 1.0.0.1" >> /etc/resolv.conf || ERR=1	
 
     if [[ $ERR -eq 1 ]]; then
         echo "DNS error."
@@ -175,7 +175,7 @@ add_user
 set_user_passwd
 add_repositories
 set_sudoers
-pacman_dependecies
+pacman_display_dependecies
 deepin_dde
 enable_sysctl_daemons
 set_dns

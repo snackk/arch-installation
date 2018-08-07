@@ -67,7 +67,7 @@ $ cd /
 $ ./environment-setup.sh
 ```
 
- * Next some hardware configs (Password may be needed here):
+ * Next some hardware specific dependencies and drivers (Password may be needed here):
 ```sh
 $ ./toshiba-s50-b131-setup.sh
 $ reboot
