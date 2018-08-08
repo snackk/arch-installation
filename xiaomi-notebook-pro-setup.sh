@@ -15,12 +15,13 @@ DISPLAY_DRIVERS='intel-vulkan nvidia bumblebee'
 function display_drivers
 {
     ERR=0
-               # Intalling display drivers
-               print_pretty_header "Installing${NC} $DISPLAY_DRIVERS"
-               pacman -S `echo $DISPLAY_DRIVERS` --noconfirm 1>/dev/null || ERR=1
-               # Setting daemon and user to bumblebee group
-               systemctl enable bumblebeed.service 1>/dev/null || ERR=1          
-               gpasswd -a $USERN bumblebee  1>/dev/null || ERR=1     
+
+   # Intalling display drivers
+   print_pretty_header "Installing${NC} $DISPLAY_DRIVERS"
+   pacman -S `echo $DISPLAY_DRIVERS` --noconfirm 1>/dev/null || ERR=1
+   # Setting daemon and user to bumblebee group
+   systemctl enable bumblebeed.service 1>/dev/null || ERR=1
+   gpasswd -a $USERN bumblebee  1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Installing display drivers error."
@@ -33,9 +34,10 @@ function display_drivers
 function blacklist_nouveau
 {
     ERR=0
-               # Supress nvidia card
-               print_pretty_header "Blacklisting nouveau"
-               echo "blacklist nouveau" > /etc/modprobe.d/nouveau.conf || ERR=1
+
+   # Supress nouveau driver
+   print_pretty_header "Blacklisting nouveau"
+   echo "blacklist nouveau" > /etc/modprobe.d/nouveau.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Blacklist error."
@@ -48,6 +50,7 @@ function blacklist_nouveau
 function missing_hardware_dependecies
 {
     ERR=0
+    
     # Downloading Hardware dependencies
     print_pretty_header "Downloading hardware dependencies"
     echo -e $ROOT_PASSWD | sudo -S pacman -Sy yaourt --noconfirm || ERR=1

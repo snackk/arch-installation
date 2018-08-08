@@ -7,13 +7,14 @@ to_install=9;
 success=0
 
 ##################################################
-#                  SNACKK-SETUP                  #
+#                ENVIRONMENT-SETUP               #
 ##################################################
 
 function run_osprober
 {
     ERR=0
-	# OS-prober
+
+	# os-prober
 	print_pretty_header "Running OS-prober${NC} /dev/$EFI_BOOT"
 	os-prober 1>/dev/null || ERR=1
 	mount /dev/$EFI_BOOT /mnt/boot
@@ -31,6 +32,7 @@ function run_osprober
 function add_user
 {
     ERR=0
+
 	# Add user
 	print_pretty_header "Adding user${NC} $USERN"
 	useradd -m -G wheel -s /bin/bash $USERN || ERR=1
@@ -46,7 +48,8 @@ function add_user
 function set_user_passwd
 {
     ERR=0
-	# Setting $USERN password
+
+	# Setting User password
 	print_pretty_header "Setting password${NC} $ROOT_PASSWD"
 	echo -e $ROOT_PASSWD"\n"$ROOT_PASSWD | passwd $USERN
 
@@ -61,9 +64,10 @@ function set_user_passwd
 function add_repositories
 {
     ERR=0
+
 	# Configure pacman
 	print_pretty_header "Adding multilib & aur"
-               sed -i '/^#VerbosePkgLists/ a ILoveCandy' /etc/pacman.conf || ERR=1
+    sed -i '/^#VerbosePkgLists/ a ILoveCandy' /etc/pacman.conf || ERR=1
 	echo "" >> /etc/pacman.conf || ERR=1
 	echo "[multilib]" >> /etc/pacman.conf || ERR=1
 	echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf || ERR=1
@@ -85,10 +89,11 @@ function add_repositories
 function set_sudoers
 {
     ERR=0
-               # Setting sudoers file
-               print_pretty_header "Setting up sudoers"
-               sed -i -e 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
-               sed -i -e 's/# %sudo ALL=(ALL) ALL/%sudo ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
+
+    # Setting sudoers
+    print_pretty_header "Setting up sudoers"
+    sed -i -e 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
+    sed -i -e 's/# %sudo ALL=(ALL) ALL/%sudo ALL=(ALL) ALL/g' /etc/sudoers || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Sudoers error."
@@ -101,6 +106,7 @@ function set_sudoers
 function pacman_display_dependecies
 {
     ERR=0
+
 	# Downloading pacman display dependencies
 	print_pretty_header "Installing${NC} $DISPLAY_PKGS"
 	pacman -S `echo $DISPLAY_PKGS` --noconfirm 1>/dev/null || ERR=1
@@ -116,6 +122,7 @@ function pacman_display_dependecies
 function deepin_dde
 {
     ERR=0
+
 	# Adding some nice touch :D
 	print_pretty_header "Installing Deepin"
 	pacman -S `echo $DEEPIN` --noconfirm 1>/dev/null || ERR=1
@@ -132,10 +139,11 @@ function deepin_dde
 function enable_sysctl_daemons
 {
     ERR=0
-               # Daemons
-               print_pretty_header "Enabling NetworkManager and Lightdm"
-               systemctl enable NetworkManager.service 1>/dev/null || ERR=1
-               systemctl enable lightdm.service 1>/dev/null || ERR=1
+
+    # Daemons
+    print_pretty_header "Enabling NetworkManager and Lightdm"
+    systemctl enable NetworkManager.service 1>/dev/null || ERR=1
+    systemctl enable lightdm.service 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Systemctl daemons error."
@@ -148,15 +156,16 @@ function enable_sysctl_daemons
 function set_dns
 {
     ERR=0
-               # CloudFlare's DNS
-               print_pretty_header "Setting CloudFlare DNS"
-               echo "[main]" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
-               echo "dns=none" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
-               rm /etc/resolv.conf
-               touch /etc/resolv.conf
-               echo "# CloudFlare IPv4 nameservers" >> /etc/resolv.conf || ERR=1
-               echo "nameserver 1.1.1.1" >> /etc/resolv.conf || ERR=1
-               echo "nameserver 1.0.0.1" >> /etc/resolv.conf || ERR=1	
+
+    # CloudFlare's DNS
+    print_pretty_header "Setting CloudFlare DNS"
+    echo "[main]" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
+    echo "dns=none" >> /etc/NetworkManager/NetworkManager.conf || ERR=1
+    rm /etc/resolv.conf
+    touch /etc/resolv.conf
+    echo "# CloudFlare IPv4 nameservers" >> /etc/resolv.conf || ERR=1
+    echo "nameserver 1.1.1.1" >> /etc/resolv.conf || ERR=1
+    echo "nameserver 1.0.0.1" >> /etc/resolv.conf || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "DNS error."

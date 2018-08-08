@@ -6,7 +6,7 @@ source snackk.conf
 to_install=3;
 
 ##################################################
-#             TOSHIBA-S50-B131-INSTALLATION      #
+#          TOSHIBA-S50-B131-INSTALLATION         #
 ##################################################
 
 HARDWARE_PKGS='aic94xx-firmware wd719x-firmware'
@@ -15,9 +15,10 @@ DISPLAY_DRIVERS='xf86-video-intel xf86-input-libinput'
 function display_drivers
 {
     ERR=0
-               # Intalling display drivers
-               print_pretty_header "Installing${NC} $DISPLAY_DRIVERS"
-               pacman -S `echo $DISPLAY_DRIVERS` --noconfirm 1>/dev/null || ERR=1
+
+   # Intalling display drivers
+   print_pretty_header "Installing${NC} $DISPLAY_DRIVERS"
+   pacman -S `echo $DISPLAY_DRIVERS` --noconfirm 1>/dev/null || ERR=1
 
     if [[ $ERR -eq 1 ]]; then
         echo "Installing display drivers error."
@@ -30,6 +31,7 @@ function display_drivers
 function blacklist_speaker
 {
     ERR=0
+
 	# Supress anoying beep
 	print_pretty_header "Blacklisting speaker"
 	echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf || ERR=1
@@ -45,6 +47,7 @@ function blacklist_speaker
 function missing_hardware_dependecies
 {
     ERR=0
+
     # Downloading Hardware dependencies
     print_pretty_header "Downloading hardware dependencies"
     echo -e $ROOT_PASSWD | sudo -S pacman -Sy yaourt --noconfirm || ERR=1

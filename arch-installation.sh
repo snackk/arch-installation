@@ -26,11 +26,12 @@ function welcome
 function make_mirrorlist_by_speed
 {
     ERR=0
+
     # Orders the mirrorlist by speed
     print_pretty_header "Ordering mirrorlist by speed:${NC} /etc/pacman.d/mirrorlist"
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup 1>/dev/null || ERR=1
     sed -i 's/^#Server/Server/' /etc/pacman.d/mirrorlist.backup 1>/dev/null || ERR=1
-    rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist 
+    rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
 
     if [[ $ERR -eq 1 ]]; then
         print_results "Mirrorlist error."
@@ -43,6 +44,7 @@ function make_mirrorlist_by_speed
 function make_root_fs
 {
     ERR=0
+
     # Formats root partition to the specified File System
     print_pretty_header "Formatting root partition${NC} /dev/$ROOT_PART"
     mkfs.$ROOT_FS /dev/$ROOT_PART -L Root 1>/dev/null || ERR=1
@@ -58,8 +60,9 @@ function make_root_fs
 function mount_root_boot_partitions
 {
     ERR=0
-    print_pretty_header "Mounting partitions${NC} /dev/$ROOT_PART /dev/$EFI_BOOT"
+
     # Mount Root partition
+    print_pretty_header "Mounting partitions${NC} /dev/$ROOT_PART /dev/$EFI_BOOT"
     mkdir /mnt/linux || ERR=1
     mount /dev/$ROOT_PART /mnt/linux || ERR=1
     # Mount Boot partition
@@ -77,6 +80,8 @@ function mount_root_boot_partitions
 function install_system
 {
     ERR=0
+
+    # Installing base system
     print_pretty_header "Running pacstrap${NC} $BASE_PKGS"
     pacstrap /mnt/linux `echo $BASE_PKGS` 1>/dev/null || ERR=1
     print_pretty_header "Building fstab"
@@ -100,15 +105,16 @@ loadkeys $KEYBOARD_LAYOUT
 while true; do
     read -p "Install arch-linux [y/n]? " yn
     case $yn in
-        [Yy]* ) echo "GG..."; break;;
-        [Nn]* ) echo "LOL n00b."; exit;;
+        [Yy]* ) echo "Good Luck ;)"; break;;
+        [Nn]* ) echo "Wise choice."; exit;;
         * ) echo "Please answer yes or no.";;
     esac
 done
 
 #### Preparation for the install
 welcome
-#make_mirrorlist_by_speed #mirrolist inst working as of right now on arch-linux
+
+# make_mirrorlist_by_speed #mirrolist inst working as of right now on arch-linux
 make_root_fs
 mount_root_boot_partitions
 

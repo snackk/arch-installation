@@ -2,10 +2,13 @@
 
 ## Overview
 
-Before anything, a customized image of arch-linux must be built, for the scripts to be on the bootable image of arch-linux. After that, the installation is divided in several stages:
+First of all you should download and burn the latest arch-linux image, that you can found under releases.
+As an alternative you could build the image yourself, look under [Customizing image](#image).
+
+The installation is divided in several stages:
 
 * **arch-installation** - *(needed)* Installs arch-linux base system.
-* **arch-configuration** - *(needed)* Sets up hostname, keyboard, language, timezone, root password and installs some dependencies along with grub, to boot the newly installed system.
+* **arch-configuration** - *(needed)* Sets up hostname, keyboard, language, timezone, root password and installs some dependencies along with grub.
 * **environment-setup** - *(needed)* Sets up a graphical environment with Deepin.
 * **snackk-setup** - *(Optional)* Installs [arch-config-files](https://github.com/snackk/arch-config-files).
 
@@ -13,9 +16,9 @@ Before anything, a customized image of arch-linux must be built, for the scripts
 * **xiaomi-notebook-pro-setup** - *(Warning)* Specific hardware configuration for this particular laptop.
 
 
-## Customizing image
+### <a name="image"></a> Customizing image
 
-To run the makefile install the required tools, and also download the latest arch-linux image:
+Install the required tools and download the latest arch-linux image from the official page:
 ```sh
 $ sudo pacman -S squashfs-tools cdrtools
 ```
@@ -42,7 +45,7 @@ Use dd or whatever tool you use to burn it somewhere.
 $ loadkeys pt-latin9
 ```
 
-* ### <a name="internet"></a> Connect to the internet.
+* ### <a name="internet"></a> Connect to the internet
 
 Wireless:
 ```sh

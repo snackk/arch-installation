@@ -12,7 +12,8 @@ to_install=7;
 function pacman_dependecies
 {
     ERR=0
-    # Downloading PACMAN dependencies
+
+    # Downloading Pacman dependencies
     print_pretty_header "Installing${NC} $SNK_CUSTOM"
     
     #BUG sudo -S not working!
@@ -29,6 +30,7 @@ function pacman_dependecies
 function grub_theme
 {
     ERR=0
+
     # Downloading grub theme
     print_pretty_header "Installing${NC} $GRUB_THEME"
     sudo -i -u $USERN yaourt -S `echo $GRUB_THEME` --noconfirm 1>/dev/null || ERR=1
@@ -47,6 +49,8 @@ function grub_theme
 function set_zsh
 {
     ERR=0
+
+    # Setting zsh
     print_pretty_header "Setting ZSH as default shell"
     echo -e $ROOT_PASSWD | chsh -s /usr/bin/zsh 1>/dev/null || ERR=1
     echo -e $ROOT_PASSWD | su -c chsh -s /usr/bin/zsh 1>/dev/null || ERR=1
@@ -62,7 +66,9 @@ function set_zsh
 function install_oh_my_zsh
 {
     ERR=0
-    print_pretty_header "Installing Oh-My-Zsh"
+
+    # Installing oh-my-zsh
+    print_pretty_header "Installing oh-my-zsh"
     cd $HOME
     echo -e $ROOT_PASSWD | sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" || ERR=1
 
@@ -77,14 +83,16 @@ function install_oh_my_zsh
 function install_zsh_powerline
 {
     ERR=0
-    print_pretty_header "Installing powerline"
+
+    # Installing powerline fonts
+    print_pretty_header "Installing powerline fonts"
     mkdir $HOME/git 1>/dev/null || ERR=1
     cd $HOME/git 1>/dev/null || ERR=1
     git clone https://github.com/powerline/fonts.git --depth=1 1>/dev/null || ERR=1
     # install
     cd fonts 1>/dev/null || ERR=1
     ./install.sh 1>/dev/null || ERR=1
-    # clean-up a bit
+    # clean-up the mess
     cd .. 1>/dev/null || ERR=1
     rm -rf fonts 1>/dev/null || ERR=1
 
@@ -99,6 +107,7 @@ function install_zsh_powerline
 function install_awesome_vimrc
 {
     ERR=0
+
     print_pretty_header "Installing an awesome vimrc"
     git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime 1>/dev/null || ERR=1
     # install
@@ -115,6 +124,7 @@ function install_awesome_vimrc
 function install_config_files
 {
     ERR=0
+
     print_pretty_header "Installing arch-config-files"
     cd $HOME/git 1>/dev/null || ERR=1
     git clone https://github.com/snackk/arch-config-files 1>/dev/null || ERR=1

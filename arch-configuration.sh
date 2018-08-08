@@ -12,6 +12,7 @@ to_install=10;
 function set_hostname
 {
     ERR=0
+
 	# Hostname
 	print_pretty_header "Setting hostname${NC} $HOSTN"
 	echo $HOSTN > /etc/hostname || ERR=1
@@ -27,7 +28,8 @@ function set_hostname
 function set_keyboard_layout
 {
     ERR=0
-	# Keybord Layout
+
+	# Keyboard Layout
 	print_pretty_header "Setting keyboard layout${NC} $KEYBOARD_LAYOUT"
 	echo 'KEYMAP='$KEYBOARD_LAYOUT > /etc/vconsole.conf || ERR=1
 
@@ -42,7 +44,8 @@ function set_keyboard_layout
 function set_locale
 {
     ERR=0
-	# Locale
+
+	# Setting Locale
 	print_pretty_header "Setting locale${NC} $LANGUAGE"
 	sed -i 's/^#'$LANGUAGE'/'$LANGUAGE/ /etc/locale.gen || ERR=1
 	locale-gen 1>/dev/null || ERR=1
@@ -58,7 +61,8 @@ function set_locale
 function set_language
 {
     ERR=0
-	# Locale locale.conf
+
+	# Setting language
 	print_pretty_header "Setting language${NC} $LANGUAGE"
 	export LANG=$LANGUAGE'.utf-8'
 	echo 'LANG='$LANGUAGE'.utf-8' > /etc/locale.conf
@@ -74,6 +78,7 @@ function set_language
 function set_timezone
 {
     ERR=0
+
 	# Time zone
 	print_pretty_header "Setting time zone${NC} $LOCALE"
 	ln -sf /usr/share/zoneinfo/$LOCALE /etc/localtime || ERR=1
@@ -91,7 +96,8 @@ function set_timezone
 function set_initial_ramdisk
 {
     ERR=0
-	# Setting an initial ramdisk environment
+
+	# Setting initial ramdisk environment
 	print_pretty_header "Setting initial ramdisk"
 	mkinitcpio -p linux 1>/dev/null || ERR=1
 
@@ -106,6 +112,7 @@ function set_initial_ramdisk
 function set_root_passwd
 {
     ERR=0
+
 	# Setting root password
 	print_pretty_header "Setting root password${NC} $ROOT_PASSWD"
 	echo -e $ROOT_PASSWD"\n"$ROOT_PASSWD | passwd
@@ -121,7 +128,8 @@ function set_root_passwd
 function install_basic_dependencies
 {
     ERR=0
-	# Installing basic installation dependencies
+
+	# Installing basic dependencies
 	print_pretty_header "Installing${NC} $BASIC_PKGS"
 	pacman -S `echo $BASIC_PKGS` --noconfirm 1>/dev/null || ERR=1
 
@@ -136,6 +144,7 @@ function install_basic_dependencies
 function install_efi
 {
     ERR=0
+
 	# Install EFI
 	mkdir /mnt/boot || ERR=1
 	mount /dev/$EFI_BOOT /mnt/boot || ERR=1
@@ -153,6 +162,7 @@ function install_efi
 function install_grub
 {
     ERR=0
+
 	# Making grub config
 	print_pretty_header "Installing grub on${NC} /dev/$EFI_BOOT"  
 	grub-mkconfig -o /mnt/boot/grub/grub.cfg 1>/dev/null || ERR=1
