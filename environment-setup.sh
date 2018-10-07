@@ -175,48 +175,6 @@ function set_dns
     fi
 }
 
-function install_yaourt
-{
-    ERR=0
-    
-    # Installing yaourt
-    print_pretty_header "Installing yaourt"
-echo -e $ROOT_PASSWD | sudo -s << EOF
-cd /tmp 1>/dev/null || ERR=1
-git clone https://aur.archlinux.org/yaourt.git --depth=1 1>/dev/null || ERR=1
-cd yaourt/ 1>/dev/null || ERR=1
-makepkg -si --noconfirm 1>/dev/null || ERR=1
-cd ~ 1>/dev/null || ERR=1
-EOF
-     if [[ $ERR -eq 1 ]]; then
-        echo "Installing yaourt error."
-        exit 1
-    else
-        let success+=1;
-    fi
-}
-
-function install_yay
-{
-    ERR=0
-    
-    # Installing yay
-    print_pretty_header "Installing yay"
-echo -e $ROOT_PASSWD | sudo -s << EOF
-cd /tmp 1>/dev/null || ERR=1
-git clone https://aur.archlinux.org/yay.git --depth=1 1>/dev/null || ERR=1
-cd yay/ 1>/dev/null || ERR=1
-sudo -i -u $USERN makepkg -si --noconfirm 1>/dev/null || ERR=1
-cd ~ 1>/dev/null || ERR=1
-EOF
-     if [[ $ERR -eq 1 ]]; then
-        echo "Installing yay error."
-        exit 1
-    else
-        let success+=1;
-    fi
-}
-
 ##################################################
 #           		Script                       #
 ##################################################
@@ -230,8 +188,6 @@ pacman_display_dependecies
 deepin_dde
 enable_sysctl_daemons
 set_dns
-#install_yaourt
-install_yay
 
 print_results
 print_line
