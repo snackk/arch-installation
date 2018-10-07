@@ -16,8 +16,9 @@ function pacman_dependecies
     # Downloading Pacman dependencies
     print_pretty_header "Installing${NC} $SNK_CUSTOM"
     
-    #BUG sudo -S not working!
-    echo -e $ROOT_PASSWD | sudo -S pacman -S `echo $SNK_CUSTOM` --noconfirm || ERR=1
+    echo -e $ROOT_PASSWD | sudo -s << EOF
+pacman -S `echo $SNK_CUSTOM` --noconfirm || ERR=1
+EOF
 
     if [[ $ERR -eq 1 ]]; then
         echo "Pacman dependencies error."
@@ -145,7 +146,7 @@ function install_config_files
 ##################################################
 
 pacman_dependecies
-grub_theme
+#grub_theme
 set_zsh
 install_oh_my_zsh
 install_zsh_powerline

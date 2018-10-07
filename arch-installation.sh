@@ -142,6 +142,7 @@ EOF
 
 print_pretty_header "Unmounting partitions now."
 umount /mnt/linux
-print_pretty_header "Computer will shutdown. Power it on and run ./environment-setup.sh"
+print_pretty_header "Computer will shutdown."
+print_pretty_header "Power it on and run ./environment-setup.sh"
 shutdown -h +1 ""
 

@@ -49,8 +49,6 @@ function missing_hardware_dependecies
     ERR=0
 
     # Downloading Hardware dependencies
-    print_pretty_header "Downloading hardware dependencies"
-    echo -e $ROOT_PASSWD | sudo -S pacman -Sy yaourt --noconfirm || ERR=1
     print_pretty_header "Installing${NC} $HARDWARE_PKGS"
     sudo -i -u $USERN yaourt -S `echo $HARDWARE_PKGS` --noconfirm 1>/dev/null || ERR=1
     print_pretty_header "Resetting initial ramdisk" 
