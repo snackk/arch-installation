@@ -3,7 +3,7 @@
 
 source snackk.conf
 
-to_install=7;
+to_install=6;
 
 ##################################################
 #                  SNACKK-SETUP                  #
