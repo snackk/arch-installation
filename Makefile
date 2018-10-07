@@ -91,7 +91,7 @@ ifeq (GENISOIMAGE,)
 endif
 	@echo "#############################"
 	@echo "Building new ISO..."
-	@genisoimage -l -r -J -V $(ARCH_LABEL) -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -c isolinux/boot.cat -o ./build/out/snackk-archlinux-`date +%Y.%m.%d`-dual.iso $(CUSTOM_ISO_DIR)
+	@genisoimage -l -r -J -V $(ARCH_LABEL) -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -c isolinux/boot.cat -o ./build/out/snackk-archlinux-`date +%Y.%m.%d`-x86_64.iso $(CUSTOM_ISO_DIR)
 	@sudo chmod a+rw ./build/out/*
 
 	@echo "#############################"
