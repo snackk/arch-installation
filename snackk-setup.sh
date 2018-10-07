@@ -34,7 +34,7 @@ function grub_theme
 
     # Downloading grub theme
     print_pretty_header "Installing${NC} $GRUB_THEME"
-    sudo -i -u $USERN yaourt -S `echo $GRUB_THEME` --noconfirm 1>/dev/null || ERR=1
+    sudo -i -u $USERN yay -S `echo $GRUB_THEME` --noconfirm 1>/dev/null || ERR=1
     echo -e $ROOT_PASSWD | echo 'GRUB_THEME="/boot/grub/themes/Vimix/theme.txt"' | sudo tee -a /etc/default/grub > /dev/null || ERR=1
     echo -e $ROOT_PASSWD | sudo -S mount /dev/$EFI_BOOT /mnt || ERR=1
     echo -e $ROOT_PASSWD | sudo -S grub-mkconfig -o /mnt/boot/grub/grub.cfg 1>/dev/null || ERR=1 
@@ -155,6 +155,3 @@ install_config_files
 
 print_results
 print_line
-
-
-

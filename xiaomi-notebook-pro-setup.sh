@@ -18,13 +18,12 @@ function install_yaourt
     
     # Installing yaourt
     print_pretty_header "Installing yaourt"
-echo -e $ROOT_PASSWD | sudo -s << EOF
-cd /tmp 1>/dev/null || ERR=1
-git clone https://aur.archlinux.org/yaourt.git --depth=1 1>/dev/null || ERR=1
-cd yaourt/ 1>/dev/null || ERR=1
-makepkg -si --noconfirm 1>/dev/null || ERR=1
-cd ~ 1>/dev/null || ERR=1
-EOF
+    cd ~/Downloads 1>/dev/null || ERR=1
+    git clone https://aur.archlinux.org/yaourt.git --depth=1 1>/dev/null || ERR=1
+    cd yaourt/ 1>/dev/null || ERR=1
+    makepkg -si --noconfirm 1>/dev/null || ERR=1
+    cd ~ 1>/dev/null || ERR=1
+
      if [[ $ERR -eq 1 ]]; then
         echo "Installing yaourt error."
         exit 1
@@ -42,7 +41,7 @@ function install_yay
     cd ~/Downloads 1>/dev/null || ERR=1
     git clone https://aur.archlinux.org/yay.git --depth=1 1>/dev/null || ERR=1
     cd yay/ 1>/dev/null || ERR=1
-    echo -e $ROOT_PASSWD | makepkg -si --noconfirm 1>/dev/null || ERR=1
+    makepkg -si --noconfirm 1>/dev/null || ERR=1
     cd ~ 1>/dev/null || ERR=1
     
     if [[ $ERR -eq 1 ]]; then
@@ -78,7 +77,7 @@ function missing_hardware_dependecies
     
     # Downloading Hardware dependencies
     print_pretty_header "Installing${NC} $HARDWARE_PKGS"
-    sudo -i -u $USERN yaourt -S `echo $HARDWARE_PKGS` --noconfirm 1>/dev/null || ERR=1
+    sudo -i -u $USERN yay -S `echo $HARDWARE_PKGS` --noconfirm 1>/dev/null || ERR=1
     print_pretty_header "Resetting initial ramdisk" 
     echo -e $ROOT_PASSWD | sudo -S mkinitcpio -p linux || ERR=1
 
@@ -101,6 +100,3 @@ missing_hardware_dependecies
 
 print_results
 print_line
-
-
-

@@ -116,6 +116,3 @@ missing_hardware_dependecies
 
 print_results
 print_line
-
-
-
