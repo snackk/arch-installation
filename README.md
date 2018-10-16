@@ -3,8 +3,10 @@
 
 ## Overview
 
-First of all you should download and burn the latest arch-linux image, that you can found under releases.
-As an alternative you could build the image yourself, look under [Customizing image](#image).
+This is a tool that I've built to help ease the process of installing arch-linux distro. It's meant to install the base arch-linux system, and then apply my drivers, config, Desktop-Environment upon it. Settings could be changed to meet your desire, edit the snackk.conf file.
+
+First of all you should download and burn the latest arch-linux image, that you can find under releases.
+As an alternative, you can build the image yourself, look under [Customizing image](#image) to see how.
 
 The installation is divided in several stages:
 
