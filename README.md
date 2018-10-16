@@ -1,7 +1,6 @@
-[![Build Status](https://travis-ci.org/snackk/arch-installation.svg?branch=master)](https://travis-ci.org/snackk/arch-installation)
-
 <img src="https://www.archlinux.org/static/logos/archlinux-logo-dark-1200dpi.b42bd35d5916.png" alt="alt text" width="600" height="200">
 
+[![Build Status](https://travis-ci.org/snackk/arch-installation.svg?branch=master)](https://travis-ci.org/snackk/arch-installation)
 
 ## Overview
 
