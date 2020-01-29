@@ -1,4 +1,7 @@
-<img src="https://www.archlinux.org/static/logos/archlinux-logo-dark-1200dpi.b42bd35d5916.png" alt="alt text" width="600" height="200">
+# arch-installation
+<p align="center">
+ <img src="https://www.archlinux.org/static/logos/archlinux-logo-dark-1200dpi.b42bd35d5916.png" alt="alt text" width="600" height="200">
+ </p>
 
 [![Build Status](https://travis-ci.org/snackk/arch-installation.svg?branch=master)](https://travis-ci.org/snackk/arch-installation) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
